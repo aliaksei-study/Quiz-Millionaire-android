@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/sky_logo">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:contentDescription="@string/background_stars"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/millionaire_logo" />
+
+    <Button
+        android:id="@+id/sign_in"
+        android:text="@string/sign_in"
+        style="@style/MainMenuButton"
+        />
+
+    <Button
+        android:id="@+id/new_account"
+        android:text="@string/sign_up"
+        style="@style/MainMenuButton"
+        />
+
+    <Button
+        android:id="@+id/start_game"
+        android:text="@string/start_game"
+        style="@style/MainMenuButton"
+        />
+
+    <Button
+        android:id="@+id/cancel"
+        android:text="@string/cancel"
+        style="@style/MainMenuButton"
+        />
+
+    <EditText
+        android:id="@+id/email"
+        android:visibility="gone"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/player_email"
+        android:inputType="textWebEmailAddress"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        android:visibility="gone"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/player_password"
+        android:inputType="textPassword"
+        />
+
+</LinearLayout>
