@@ -38,9 +38,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#ffffff"
+            android:backgroundTint="@color/whiteColor"
             android:inputType="textWebEmailAddress"
-            android:textColor="#ffffff"
+            android:textColor="@color/whiteColor"
             android:singleLine="true"
             android:hint="@string/player_email" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -56,9 +56,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#ffffff"
+            android:backgroundTint="@color/whiteColor"
             android:singleLine="true"
-            android:textColor="#ffffff"
+            android:textColor="@color/whiteColor"
             android:inputType="textPassword"
             android:hint="@string/player_password" />
     </com.google.android.material.textfield.TextInputLayout>
