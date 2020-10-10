@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
 
@@ -16,13 +15,11 @@ import com.example.quizmillionaire.R;
 
 public class MenuFragment extends Fragment {
     private Button signIn;
-    private Button createNewAccount;
+    private Button signUp;
     private EditText playerEmail;
     private EditText playerPassword;
-    private LinearLayout playerFormButtons;
     private Button startGame;
     private Button cancel;
-    private Button settings;
     private Handler handler;
     private Runnable runnable = () -> ((MainActivity)getActivity()).setViewPager(1);
 
@@ -31,31 +28,37 @@ public class MenuFragment extends Fragment {
 
     private void findElementsByIds(View view) {
         signIn = view.findViewById(R.id.sign_in);
-        createNewAccount = view.findViewById(R.id.new_account);
+        signUp = view.findViewById(R.id.sign_up);
         playerEmail = view.findViewById(R.id.email);
         playerPassword = view.findViewById(R.id.password);
-        playerFormButtons = view.findViewById(R.id.player_form_buttons);
         startGame = view.findViewById(R.id.start_game);
         cancel = view.findViewById(R.id.cancel);
-        settings = view.findViewById(R.id.settings);
     }
 
+    private void setEditTextChangeListeners(View view) {
 
+    }
 
     private void setOnClickListeners() {
         signIn.setOnClickListener((v) -> {
             playerEmail.setVisibility(View.VISIBLE);
-            playerFormButtons.setVisibility(View.VISIBLE);
+            signIn.setVisibility(View.GONE);
+            signUp.setVisibility(View.GONE);
+            cancel.setVisibility(View.VISIBLE);
         });
-        createNewAccount.setOnClickListener((v) -> {
+        signUp.setOnClickListener((v) -> {
             playerEmail.setVisibility(View.VISIBLE);
             playerPassword.setVisibility(View.VISIBLE);
-            playerFormButtons.setVisibility(View.VISIBLE);
+            signIn.setVisibility(View.GONE);
+            signUp.setVisibility(View.GONE);
+            cancel.setVisibility(View.VISIBLE);
         });
         cancel.setOnClickListener((v) -> {
             playerEmail.setVisibility(View.GONE);
             playerPassword.setVisibility(View.GONE);
-            playerFormButtons.setVisibility(View.GONE);
+            signIn.setVisibility(View.VISIBLE);
+            signUp.setVisibility(View.VISIBLE);
+            cancel.setVisibility(View.GONE);
         });
         startGame.setOnClickListener((v) -> {
             handler.postDelayed(runnable, 5000);

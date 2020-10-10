@@ -20,9 +20,25 @@
         />
 
     <Button
-        android:id="@+id/new_account"
+        android:id="@+id/sign_up"
         android:text="@string/sign_up"
         style="@style/MainMenuButton"
+        />
+
+    <EditText
+        android:id="@+id/email"
+        android:visibility="gone"
+        style="@style/EditTextMenu"
+        android:hint="@string/player_email"
+        android:inputType="textWebEmailAddress"
+        />
+
+    <EditText
+        android:id="@+id/password"
+        style="@style/EditTextMenu"
+        android:visibility="gone"
+        android:hint="@string/player_password"
+        android:inputType="textPassword"
         />
 
     <Button
@@ -33,26 +49,9 @@
 
     <Button
         android:id="@+id/cancel"
+        android:visibility="gone"
         android:text="@string/cancel"
         style="@style/MainMenuButton"
-        />
-
-    <EditText
-        android:id="@+id/email"
-        android:visibility="gone"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/player_email"
-        android:inputType="textWebEmailAddress"
-        />
-
-    <EditText
-        android:id="@+id/password"
-        android:visibility="gone"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/player_password"
-        android:inputType="textPassword"
         />
 
 </LinearLayout>
