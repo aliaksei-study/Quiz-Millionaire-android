@@ -12,12 +12,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.quizmillionaire.MainActivity;
 import com.example.quizmillionaire.R;
+import com.example.quizmillionaire.utils.validation.EmailTextWatcher;
+import com.example.quizmillionaire.utils.validation.ErrorTextWatcher;
+import com.example.quizmillionaire.utils.validation.NotEmptyStringTextWatcher;
+import com.google.android.material.textfield.TextInputLayout;
 
 public class MenuFragment extends Fragment {
     private Button signIn;
     private Button signUp;
-    private EditText playerEmail;
-    private EditText playerPassword;
+    private TextInputLayout playerEmail;
+    private TextInputLayout playerPassword;
     private Button startGame;
     private Button cancel;
     private Handler handler;
@@ -35,8 +39,19 @@ public class MenuFragment extends Fragment {
         cancel = view.findViewById(R.id.cancel);
     }
 
-    private void setEditTextChangeListeners(View view) {
-
+    private void setEditTextChangeListeners() {
+        ErrorTextWatcher notEmptyStringTextWatcher = new NotEmptyStringTextWatcher(playerPassword,
+                "This field is required", startGame, cancel);
+        ErrorTextWatcher emailTextWatcher = new EmailTextWatcher(playerEmail,
+                "Invalid email", startGame, cancel);
+        EditText passwordEditText = playerPassword.getEditText();
+        EditText emailEditText = playerEmail.getEditText();
+        if(passwordEditText != null) {
+            passwordEditText.addTextChangedListener(notEmptyStringTextWatcher);
+        }
+        if(emailEditText != null) {
+            emailEditText.addTextChangedListener(emailTextWatcher);
+        }
     }
 
     private void setOnClickListeners() {
@@ -72,6 +87,7 @@ public class MenuFragment extends Fragment {
         handler = new Handler();
         findElementsByIds(view);
         setOnClickListeners();
+        setEditTextChangeListeners();
         return view;
     }
 

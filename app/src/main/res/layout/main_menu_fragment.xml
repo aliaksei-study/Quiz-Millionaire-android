@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/sky_logo">
+    android:background="@drawable/sky_logo"
+    android:focusableInTouchMode="true">
 
     <ImageView
         android:id="@+id/icon"
@@ -25,21 +27,41 @@
         style="@style/MainMenuButton"
         />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email"
         android:visibility="gone"
-        style="@style/EditTextMenu"
-        android:hint="@string/player_email"
-        android:inputType="textWebEmailAddress"
-        />
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        >
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:inputType="textWebEmailAddress"
+            android:textColor="#ffffff"
+            android:singleLine="true"
+            android:hint="@string/player_email" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password"
-        style="@style/EditTextMenu"
+        android:layout_width="300dp"
         android:visibility="gone"
-        android:hint="@string/player_password"
-        android:inputType="textPassword"
-        />
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#ffffff"
+            android:singleLine="true"
+            android:textColor="#ffffff"
+            android:inputType="textPassword"
+            android:hint="@string/player_password" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/start_game"
@@ -53,5 +75,6 @@
         android:text="@string/cancel"
         style="@style/MainMenuButton"
         />
+
 
 </LinearLayout>
