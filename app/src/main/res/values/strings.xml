@@ -8,4 +8,8 @@
     <string name="player_password">Password</string>
     <string name="cancel">Cancel</string>
     <string name="background_stars">background stars</string>
+    <string name="helper_fifty_percent">helper fifty percent</string>
+    <string name="folks_helper">folks helper</string>
+    <string name="phone_helper">phone helper</string>
+    <string name="image_of_a_question">Image of a question</string>
 </resources>
