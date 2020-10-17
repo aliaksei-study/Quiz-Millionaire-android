@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "506322938340",
+    "firebase_url": "https://quizmillionaire-fffc6.firebaseio.com",
+    "project_id": "quizmillionaire-fffc6",
+    "storage_bucket": "quizmillionaire-fffc6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506322938340:android:9a5b21a3754343f985bff1",
+        "android_client_info": {
+          "package_name": "com.example.quizmillionaire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "506322938340-mbdljn8hq556dog9ddomvjk0997bqqkk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quizmillionaire",
+            "certificate_hash": "52d96572d8c7b698db4d0191fd81fbbb105fdcc2"
+          }
+        },
+        {
+          "client_id": "506322938340-dr2jh39f5mgnpi1gkjge1sostvfcnnb4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfhzMnvbkPznbl85G_AlFQSIDrlKv4AV4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "506322938340-dr2jh39f5mgnpi1gkjge1sostvfcnnb4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

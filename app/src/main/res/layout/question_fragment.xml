@@ -1,128 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sky_logo"
-    android:orientation="vertical"
     android:padding="10dp">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/question_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:contentDescription="@string/image_of_a_question"
+        android:src="@drawable/millionaire_logo" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:contentDescription="@string/helper_fifty_percent"
-                android:src="@drawable/fifty_helper" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/sky_logo"
-                android:contentDescription="@string/folks_helper"
-                android:src="@drawable/folks_helper" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <ImageButton
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/sky_logo"
-                android:contentDescription="@string/phone_helper"
-                android:src="@drawable/phone_helper" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:gravity="center"
-            android:shadowColor="@color/goldColor"
-            android:shadowDx="4"
-            android:shadowDy="4"
-            android:shadowRadius="4"
-            android:text="1/15"
-            android:textAllCaps="false"
-            android:textColor="@color/goldColor"
-            android:textSize="30sp" />
-
-    </LinearLayout>
-
-    <RelativeLayout
+    <TextView
+        android:id="@+id/question"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="20dp">
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:layout_marginTop="10dp"
+        android:background="@color/blackColor"
+        android:textAlignment="center"
+        android:textColor="@color/whiteColor"
+        android:textSize="30sp" />
 
-        <ImageView
-            android:id="@+id/question_image"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_above="@id/question"
-            android:contentDescription="@string/image_of_a_question"
-            android:src="@drawable/millionaire_logo" />
+    <TextView
+        android:id="@+id/question_cost"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp"
+        android:background="@color/blackColor"
+        android:textAlignment="center"
+        android:textColor="@color/whiteColor"
+        android:textSize="30sp" />
 
-        <TextView
-            android:id="@+id/question"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/question_cost"
-            android:layout_marginTop="10dp"
-            android:background="@color/blackColor"
-            android:minHeight="100dp"
-            android:textAlignment="center"
-            android:textColor="@color/whiteColor"
-            android:textSize="30sp" />
+    <Button
+        android:id="@+id/first_answer"
+        style="@style/AnswerButton"
+        android:background="@drawable/answer_button_shape" />
 
-        <TextView
-            android:id="@+id/question_cost"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_above="@id/first_answer"
-            android:layout_marginTop="10dp"
-            android:background="@color/blackColor"
-            android:textAlignment="center"
-            android:textColor="@color/whiteColor"
-            android:textSize="30sp" />
+    <Button
+        android:id="@+id/second_answer"
+        style="@style/AnswerButton"
+        android:background="@drawable/answer_button_shape" />
 
-        <Button
-            android:id="@+id/first_answer"
-            style="@style/AnswerButton"
-            android:layout_above="@id/second_answer"
-            android:background="@drawable/answer_button_shape" />
+    <Button
+        android:id="@+id/third_answer"
+        style="@style/AnswerButton"
+        android:background="@drawable/answer_button_shape" />
 
-        <Button
-            android:id="@+id/second_answer"
-            style="@style/AnswerButton"
-            android:layout_above="@id/third_answer"
-            android:background="@drawable/answer_button_shape" />
-
-        <Button
-            android:id="@+id/third_answer"
-            style="@style/AnswerButton"
-            android:layout_above="@id/fourth_answer"
-            android:background="@drawable/answer_button_shape" />
-
-        <Button
-            android:id="@+id/fourth_answer"
-            style="@style/AnswerButton"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/answer_button_shape" />
-    </RelativeLayout>
+    <Button
+        android:id="@+id/fourth_answer"
+        style="@style/AnswerButton"
+        android:background="@drawable/answer_button_shape" />
 </LinearLayout>

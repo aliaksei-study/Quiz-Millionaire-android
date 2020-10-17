@@ -15,9 +15,17 @@ import com.example.quizmillionaire.R;
 import com.example.quizmillionaire.utils.validation.EmailTextWatcher;
 import com.example.quizmillionaire.utils.validation.ErrorTextWatcher;
 import com.example.quizmillionaire.utils.validation.NotEmptyStringTextWatcher;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Collections;
+import java.util.List;
+
 public class MenuFragment extends Fragment {
+    private AdView mAdView;
     private Button signIn;
     private Button signUp;
     private TextInputLayout playerEmail;
@@ -37,6 +45,7 @@ public class MenuFragment extends Fragment {
         playerPassword = view.findViewById(R.id.password);
         startGame = view.findViewById(R.id.start_game);
         cancel = view.findViewById(R.id.cancel);
+        mAdView = view.findViewById(R.id.adView);
     }
 
     private void setEditTextChangeListeners() {
@@ -88,6 +97,15 @@ public class MenuFragment extends Fragment {
         findElementsByIds(view);
         setOnClickListeners();
         setEditTextChangeListeners();
+        MobileAds.initialize(getContext(), initializationStatus -> {});
+        List<String> testDeviceIds = Collections.singletonList("B33C81ED35A25990C8EC1268B686C1F0");
+        RequestConfiguration configuration =
+                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
+        MobileAds.setRequestConfiguration(configuration);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .build();
+        mAdView.loadAd(adRequest);
         return view;
     }
 

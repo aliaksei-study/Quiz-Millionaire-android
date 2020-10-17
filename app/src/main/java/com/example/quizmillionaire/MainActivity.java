@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.quizmillionaire.adapter.SectionsStatePagerAdapter;
 import com.example.quizmillionaire.customviewpager.NonSwipeableViewPager;
 import com.example.quizmillionaire.fragment.MenuFragment;
+import com.example.quizmillionaire.fragment.QuestionFragment;
 import com.example.quizmillionaire.model.Question;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
         SectionsStatePagerAdapter adapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         viewPager.setPagingEnabled(true);
         adapter.addFragment(new MenuFragment(), "Menu fragment");
-        adapter.addFragment(new MenuFragment(), "Menu fragment");
-        adapter.addFragment(new MenuFragment(), "Menu fragment");
+        adapter.addFragment(new QuestionFragment(), "Question 1");
+        adapter.addFragment(new QuestionFragment(), "Question 2");
         viewPager.setAdapter(adapter);
     }
 
