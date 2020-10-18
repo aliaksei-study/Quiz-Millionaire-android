@@ -15,6 +15,7 @@ public class AnswerStatistics extends Statistics implements Serializable {
     private Answer answer;
 
     public AnswerStatistics(Question question, Answer answer) {
+        super();
         this.question = question;
         this.answer = answer;
     }

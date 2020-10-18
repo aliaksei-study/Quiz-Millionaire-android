@@ -10,12 +10,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class Statistics implements Serializable {
     private Long id;
     private Difficulty preferredDifficulty;
     private int numberOfGames;
     private int score;
+
+    public Statistics() {
+
+    }
 
     public Statistics(Difficulty difficulty, int numberOfGames, int score) {
         this.preferredDifficulty = difficulty;

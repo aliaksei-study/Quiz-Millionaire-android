@@ -1,5 +1,6 @@
 package com.example.quizmillionaire.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -33,9 +34,16 @@ public class MenuFragment extends Fragment {
     private Button startGame;
     private Button cancel;
     private Handler handler;
-    private Runnable runnable = () -> ((MainActivity)getActivity()).setViewPager(1);
+    private Runnable runnable = () -> {
+        MainActivity activity = (MainActivity) getActivity();
+        if(activity != null) {
+            activity.setViewPager(this.nextFragment);
+        }
+    };
+    private int nextFragment;
 
-    public MenuFragment() {
+    public MenuFragment(int nextFragment) {
+        this.nextFragment = nextFragment;
     }
 
     private void findElementsByIds(View view) {

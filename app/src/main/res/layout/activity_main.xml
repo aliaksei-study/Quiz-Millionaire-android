@@ -1,15 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.quizmillionaire.customviewpager.NonSwipeableViewPager
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/app_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/container"
-        >
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
 
-    </com.example.quizmillionaire.customviewpager.NonSwipeableViewPager>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/add_question_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/add_question_asset"
+                android:src="@drawable/ic_add_circle_outline_white_36dp"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/fifty_percent_helper_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/helper_fifty_percent"
+                android:src="@drawable/ic_looks_two_white_36dp" />
+
+            <ImageButton
+                android:id="@+id/folks_helper_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/folks_helper"
+                android:src="@drawable/ic_people_white_36dp" />
+
+            <ImageButton
+                android:id="@+id/dislike_question_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/dislike_question_asset"
+                android:src="@drawable/ic_thumb_down_white_36dp" />
+
+            <ImageButton
+                android:id="@+id/like_question_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/like_question_asset"
+                android:src="@drawable/ic_thumb_up_white_36dp" />
+
+            <TextView
+                android:id="@+id/correct_question_answers_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/goldColor"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.example.quizmillionaire.customviewpager.NonSwipeableViewPager
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
