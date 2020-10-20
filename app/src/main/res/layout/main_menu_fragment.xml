@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="400dp"
+            android:layout_height="400dp"
             android:contentDescription="@string/background_stars"
             android:src="@drawable/millionaire_logo" />
 
@@ -93,6 +93,5 @@
             ads:adSize="BANNER"
             ads:adUnitId="@string/banner_ad_unit_id" />
     </RelativeLayout>
-
 
 </LinearLayout>
