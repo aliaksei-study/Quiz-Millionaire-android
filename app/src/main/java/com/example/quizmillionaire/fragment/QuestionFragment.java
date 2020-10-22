@@ -59,8 +59,13 @@ public class QuestionFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.question_fragment, container, false);
         findElementsById(view);
+        fillQuestionElements();
         setOnClickListeners();
         return view;
+    }
+
+    private void fillQuestionElements() {
+
     }
 
 }

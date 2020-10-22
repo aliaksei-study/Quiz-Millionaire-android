@@ -1,6 +1,5 @@
 package com.example.quizmillionaire.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -8,22 +7,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.example.quizmillionaire.MainActivity;
 import com.example.quizmillionaire.R;
+import com.example.quizmillionaire.config.AdMobConfiguration;
+import com.example.quizmillionaire.config.NetworkConfiguration;
+import com.example.quizmillionaire.model.Question;
 import com.example.quizmillionaire.utils.validation.EmailTextWatcher;
 import com.example.quizmillionaire.utils.validation.ErrorTextWatcher;
 import com.example.quizmillionaire.utils.validation.NotEmptyStringTextWatcher;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Collections;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MenuFragment extends Fragment {
     private AdView mAdView;
@@ -76,12 +81,14 @@ public class MenuFragment extends Fragment {
             playerEmail.setVisibility(View.VISIBLE);
             signIn.setVisibility(View.GONE);
             signUp.setVisibility(View.GONE);
+            startGame.setVisibility(View.VISIBLE);
             cancel.setVisibility(View.VISIBLE);
         });
         signUp.setOnClickListener((v) -> {
             playerEmail.setVisibility(View.VISIBLE);
             playerPassword.setVisibility(View.VISIBLE);
             signIn.setVisibility(View.GONE);
+            startGame.setVisibility(View.VISIBLE);
             signUp.setVisibility(View.GONE);
             cancel.setVisibility(View.VISIBLE);
         });
@@ -90,11 +97,30 @@ public class MenuFragment extends Fragment {
             playerPassword.setVisibility(View.GONE);
             signIn.setVisibility(View.VISIBLE);
             signUp.setVisibility(View.VISIBLE);
+            startGame.setVisibility(View.GONE);
             cancel.setVisibility(View.GONE);
         });
-        startGame.setOnClickListener((v) -> {
-            handler.postDelayed(runnable, 5000);
-        });
+        startGame.setOnClickListener((v) -> NetworkConfiguration.getInstance()
+                .getQuestionApi()
+                .getQuestions()
+                .enqueue(new Callback<List<Question>>(){
+                    @Override
+                    public void onResponse(@NotNull Call<List<Question>> call,
+                                           @NotNull Response<List<Question>> response) {
+                        MainActivity activity = (MainActivity) getActivity();
+                        if(activity != null) {
+                            activity.setQuestions(response.body());
+                            activity.setTemporalUsername(playerEmail.toString());
+                            handler.postDelayed(runnable, 1000);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<List<Question>> call, @NotNull Throwable t) {
+                        Toast toast = Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                }));
     }
 
     @Override
@@ -105,15 +131,7 @@ public class MenuFragment extends Fragment {
         findElementsByIds(view);
         setOnClickListeners();
         setEditTextChangeListeners();
-        MobileAds.initialize(getContext(), initializationStatus -> {});
-        List<String> testDeviceIds = Collections.singletonList("B33C81ED35A25990C8EC1268B686C1F0");
-        RequestConfiguration configuration =
-                new RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build();
-        MobileAds.setRequestConfiguration(configuration);
-
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        mAdView.loadAd(adRequest);
+        AdMobConfiguration.configureAdMob(getContext(), mAdView);
         return view;
     }
 

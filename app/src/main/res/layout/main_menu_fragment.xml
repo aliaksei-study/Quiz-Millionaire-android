@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/sky_logo"
+    android:background="@drawable/main_background_600_1200"
     android:orientation="vertical">
 
     <LinearLayout
@@ -17,10 +17,11 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="400dp"
-            android:layout_height="400dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
             android:contentDescription="@string/background_stars"
-            android:src="@drawable/millionaire_logo" />
+            android:src="@drawable/millionaire_logo_ru" />
 
         <Button
             android:id="@+id/sign_in"
@@ -35,7 +36,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
             android:visibility="gone"
             app:errorEnabled="true">
 
@@ -52,7 +54,8 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password"
             android:layout_width="300dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="0.3"
             android:visibility="gone"
             app:errorEnabled="true">
 
@@ -68,6 +71,7 @@
 
         <Button
             android:id="@+id/start_game"
+            android:visibility="gone"
             style="@style/MainMenuButton"
             android:text="@string/start_game" />
 

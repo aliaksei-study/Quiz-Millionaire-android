@@ -15,13 +15,15 @@ import lombok.Setter;
 public class Question implements Serializable {
     private Long id;
     private String questionText;
+    private Boolean isTemporal;
     private String imagePath;
     private Difficulty difficulty;
     private Category category;
-    Set<Answer> answers;
+    private Set<Answer> answers;
 
-    public Question(String questionText, String imagePath, Difficulty difficulty, Category category, Set<Answer> answers) {
+    public Question(String questionText, String imagePath, Boolean isTemporal, Difficulty difficulty, Category category, Set<Answer> answers) {
         this.questionText = questionText;
+        this.isTemporal = isTemporal;
         this.imagePath = imagePath;
         this.difficulty = difficulty;
         this.category = category;
