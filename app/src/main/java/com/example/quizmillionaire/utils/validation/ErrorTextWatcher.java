@@ -3,9 +3,7 @@ package com.example.quizmillionaire.utils.validation;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.example.quizmillionaire.utils.Constants;
 import com.google.android.material.textfield.TextInputLayout;
 
 import lombok.NonNull;

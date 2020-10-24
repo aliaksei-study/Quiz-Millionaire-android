@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background_600_1200">
+    android:background="@drawable/main_background_600_1200"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,11 +16,67 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Programmatically set congrats and result"
             android:textAlignment="center"
-            android:textSize="28sp"
-            android:textStyle="italic"
             android:textColor="@color/whiteColor"
-            android:text="Programmatically set congrats and result"/>
+            android:textSize="28sp"
+            android:textStyle="italic" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/first_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_grade_white_48dp"
+                android:contentDescription="@string/progress_star"/>
+            <ImageView
+                android:id="@+id/second_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_grade_white_48dp"
+                android:contentDescription="@string/progress_star"/>
+            <ImageView
+                android:id="@+id/third_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_grade_white_48dp"
+                android:contentDescription="@string/progress_star"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/leaderboard"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/menu_button_shape"
+            android:shadowColor="@color/lightGrayColor"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:text="@string/leaderboard"
+            android:textAllCaps="false"
+            android:textColor="@color/whiteColor"
+            android:textSize="30sp" />
+
+        <Button
+            android:id="@+id/try_again"
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/menu_button_shape"
+            android:shadowColor="@color/lightGrayColor"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:text="@string/try_again"
+            android:textAllCaps="false"
+            android:textColor="@color/whiteColor"
+            android:textSize="30sp" />
 
     </LinearLayout>
 
@@ -37,7 +94,5 @@
             ads:adSize="BANNER"
             ads:adUnitId="@string/banner_ad_unit_id" />
     </RelativeLayout>
-
-
 
 </LinearLayout>

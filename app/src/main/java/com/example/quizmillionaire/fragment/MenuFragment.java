@@ -38,13 +38,6 @@ public class MenuFragment extends Fragment {
     private TextInputLayout playerPassword;
     private Button startGame;
     private Button cancel;
-    private Handler handler;
-    private Runnable runnable = () -> {
-        MainActivity activity = (MainActivity) getActivity();
-        if(activity != null) {
-            activity.setViewPager(this.nextFragment);
-        }
-    };
     private int nextFragment;
 
     public MenuFragment(int nextFragment) {
@@ -100,44 +93,22 @@ public class MenuFragment extends Fragment {
             startGame.setVisibility(View.GONE);
             cancel.setVisibility(View.GONE);
         });
-        startGame.setOnClickListener((v) -> NetworkConfiguration.getInstance()
-                .getQuestionApi()
-                .getQuestions()
-                .enqueue(new Callback<List<Question>>(){
-                    @Override
-                    public void onResponse(@NotNull Call<List<Question>> call,
-                                           @NotNull Response<List<Question>> response) {
-                        MainActivity activity = (MainActivity) getActivity();
-                        if(activity != null) {
-                            activity.setQuestions(response.body());
-                            activity.setTemporalUsername(playerEmail.toString());
-                            handler.postDelayed(runnable, 1000);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NotNull Call<List<Question>> call, @NotNull Throwable t) {
-                        Toast toast = Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT);
-                        toast.show();
-                    }
-                }));
+        startGame.setOnClickListener((v) -> {
+            MainActivity activity = (MainActivity) getActivity();
+            if(activity != null) {
+                activity.setViewPager(this.nextFragment);
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.main_menu_fragment, container, false);
-        handler = new Handler();
         findElementsByIds(view);
         setOnClickListeners();
         setEditTextChangeListeners();
         AdMobConfiguration.configureAdMob(getContext(), mAdView);
         return view;
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        handler.removeCallbacks(runnable);
     }
 }

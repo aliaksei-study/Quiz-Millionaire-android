@@ -16,4 +16,7 @@
     <string name="add_question_asset">add_question_asset</string>
     <string name="dislike_question_asset">dislike_question_asset</string>
     <string name="like_question_asset">like_question_asset</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="try_again">Try again</string>
+    <string name="progress_star">progress_star</string>
 </resources>
