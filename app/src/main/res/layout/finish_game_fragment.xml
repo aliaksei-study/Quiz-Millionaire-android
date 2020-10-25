@@ -14,9 +14,9 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/result_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Programmatically set congrats and result"
             android:textAlignment="center"
             android:textColor="@color/whiteColor"
             android:textSize="28sp"
@@ -86,7 +86,7 @@
         android:layout_weight="1">
 
         <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
+            android:id="@+id/finish_adView"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"

@@ -18,6 +18,7 @@ import com.example.quizmillionaire.MainActivity;
 import com.example.quizmillionaire.R;
 import com.example.quizmillionaire.model.Answer;
 import com.example.quizmillionaire.model.Question;
+import com.squareup.picasso.Picasso;
 
 import java.net.URI;
 import java.util.Iterator;
@@ -93,12 +94,17 @@ public class QuestionFragment extends Fragment {
             int numberOfAnswer = 0;
             this.question = activity.getQuestion(activity.getNumberOfQuestion());
             activity.incrementNumberOfQuestion();
-            questionText.setText(this.question.getQuestionText());
-            firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-            secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-            thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-            fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
-            this.numberOfEndFragment = activity.getNumberOfEndFragment();
+            if(question.getImagePath() != null) {
+                Picasso.get().load(this.question.getImagePath()).into(questionImage);
+            }
+            if(this.question != null) {
+                questionText.setText(this.question.getQuestionText());
+                firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+                secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+                thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+                fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
+                this.numberOfEndFragment = activity.getNumberOfEndFragment();
+            }
         }
     }
 
