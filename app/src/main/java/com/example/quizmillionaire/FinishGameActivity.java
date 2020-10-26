@@ -54,7 +54,8 @@ public class FinishGameActivity extends AppCompatActivity {
                 thirdStar.setVisibility(View.GONE);
             }
         }
-        textView.setText("Поздравляем! Вы набрали " + (numberOfAnsweredQuestions) + " баллов из " + numberOfQuestions);
+        textView.setText(getString(R.string.finish_game_results_text_view, numberOfAnsweredQuestions,
+                numberOfQuestions));
     }
 
     private void setOnClickListeners() {
