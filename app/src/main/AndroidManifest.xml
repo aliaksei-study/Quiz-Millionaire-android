@@ -18,7 +18,15 @@
             android:value="ca-app-pub-5139885490573305~5681060767" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".QuestionActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".FinishGameActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".MainMenuActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

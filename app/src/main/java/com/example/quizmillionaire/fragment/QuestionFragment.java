@@ -14,14 +14,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.quizmillionaire.MainActivity;
+import com.example.quizmillionaire.QuestionActivity;
 import com.example.quizmillionaire.R;
 import com.example.quizmillionaire.model.Answer;
 import com.example.quizmillionaire.model.Question;
 import com.squareup.picasso.Picasso;
 
-import java.net.URI;
-import java.util.Iterator;
 import java.util.List;
 
 public class QuestionFragment extends Fragment {
@@ -31,14 +29,18 @@ public class QuestionFragment extends Fragment {
     private Button secondAnswer;
     private Button thirdAnswer;
     private Button fourthAnswer;
-    private Question question;
+    private final Question question;
     private int nextFragment;
     private Handler handler;
-    private int numberOfEndFragment;
+    private int numberOfQuestions;
     private final Runnable runnable = () -> {
-        MainActivity activity = (MainActivity) getActivity();
-        if(activity != null) {
-            activity.setViewPager(this.nextFragment);
+        QuestionActivity activity = (QuestionActivity) getActivity();
+        if (activity != null) {
+            if (this.nextFragment != this.numberOfQuestions) {
+                activity.setViewPager(this.nextFragment);
+            } else {
+                activity.setFinishGameActivity();
+            }
         }
     };
 
@@ -66,8 +68,10 @@ public class QuestionFragment extends Fragment {
         });
     }
 
-    public QuestionFragment(int nextFragment) {
+    public QuestionFragment(int nextFragment, int numberOfQuestions, Question question) {
         this.nextFragment = nextFragment;
+        this.numberOfQuestions = numberOfQuestions;
+        this.question = question;
     }
 
     @Nullable
@@ -89,22 +93,16 @@ public class QuestionFragment extends Fragment {
     }
 
     private void fillQuestionElements() {
-        MainActivity activity = (MainActivity) getActivity();
-        if(activity != null) {
-            int numberOfAnswer = 0;
-            this.question = activity.getQuestion(activity.getNumberOfQuestion());
-            activity.incrementNumberOfQuestion();
-            if(question.getImagePath() != null) {
-                Picasso.get().load(this.question.getImagePath()).into(questionImage);
-            }
-            if(this.question != null) {
-                questionText.setText(this.question.getQuestionText());
-                firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-                secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-                thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-                fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
-                this.numberOfEndFragment = activity.getNumberOfEndFragment();
-            }
+        int numberOfAnswer = 0;
+        if (question.getImagePath() != null) {
+            Picasso.get().load(this.question.getImagePath()).into(questionImage);
+        }
+        if (this.question != null) {
+            questionText.setText(this.question.getQuestionText());
+            firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+            secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+            thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+            fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
         }
     }
 
@@ -114,13 +112,13 @@ public class QuestionFragment extends Fragment {
 
     private void changeColorOfCorrectAnswerButton() {
         List<Answer> answerList = question.getAnswers();
-        for(int i = 0; i < answerList.size(); i++) {
-            if(answerList.get(i).getIsCorrect()) {
-                if(i == 0) {
+        for (int i = 0; i < answerList.size(); i++) {
+            if (answerList.get(i).getIsCorrect()) {
+                if (i == 0) {
                     firstAnswer.setBackgroundColor(Color.GREEN);
-                } else if(i == 1) {
+                } else if (i == 1) {
                     secondAnswer.setBackgroundColor(Color.GREEN);
-                } else if(i == 2) {
+                } else if (i == 2) {
                     thirdAnswer.setBackgroundColor(Color.GREEN);
                 } else {
                     fourthAnswer.setBackgroundColor(Color.GREEN);
@@ -130,12 +128,16 @@ public class QuestionFragment extends Fragment {
     }
 
     private void setAnswerButtonClickListener(Button button, int numberOfAnswer) {
-        if(isCorrectAnswerSelected(numberOfAnswer)) {
-            button.setBackgroundColor(Color.GREEN);
+        if (isCorrectAnswerSelected(numberOfAnswer)) {
+            QuestionActivity activity = (QuestionActivity) getActivity();
+            if (activity != null) {
+                button.setBackgroundColor(Color.GREEN);
+                activity.incrementNumberOfQuestion();
+            }
         } else {
             button.setBackgroundColor(Color.RED);
             changeColorOfCorrectAnswerButton();
-            this.nextFragment = this.numberOfEndFragment;
+            this.nextFragment = this.numberOfQuestions;
         }
         handler.postDelayed(runnable, 1000);
         firstAnswer.setEnabled(false);

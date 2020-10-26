@@ -1,18 +1,15 @@
-package com.example.quizmillionaire.fragment;
+package com.example.quizmillionaire;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.quizmillionaire.MainActivity;
-import com.example.quizmillionaire.R;
 import com.example.quizmillionaire.config.AdMobConfiguration;
 import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.model.Question;
@@ -24,13 +21,14 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MenuFragment extends Fragment {
+public class MainMenuActivity extends AppCompatActivity {
     private AdView mAdView;
     private Button signIn;
     private Button signUp;
@@ -38,20 +36,29 @@ public class MenuFragment extends Fragment {
     private TextInputLayout playerPassword;
     private Button startGame;
     private Button cancel;
-    private int nextFragment;
 
-    public MenuFragment(int nextFragment) {
-        this.nextFragment = nextFragment;
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_menu);
+        findElementsByIds();
+        setOnClickListeners();
+        setEditTextChangeListeners();
+        AdMobConfiguration.configureAdMob(getApplicationContext(), mAdView);
     }
 
-    private void findElementsByIds(View view) {
-        signIn = view.findViewById(R.id.sign_in);
-        signUp = view.findViewById(R.id.sign_up);
-        playerEmail = view.findViewById(R.id.email);
-        playerPassword = view.findViewById(R.id.password);
-        startGame = view.findViewById(R.id.start_game);
-        cancel = view.findViewById(R.id.cancel);
-        mAdView = view.findViewById(R.id.adView);
+    @Override
+    public void onBackPressed() {
+    }
+
+    private void findElementsByIds() {
+        signIn = findViewById(R.id.sign_in);
+        signUp = findViewById(R.id.sign_up);
+        playerEmail = findViewById(R.id.email);
+        playerPassword = findViewById(R.id.password);
+        startGame = findViewById(R.id.start_game);
+        cancel = findViewById(R.id.cancel);
+        mAdView = findViewById(R.id.adView);
     }
 
     private void setEditTextChangeListeners() {
@@ -61,12 +68,33 @@ public class MenuFragment extends Fragment {
                 "Invalid email", startGame, cancel);
         EditText passwordEditText = playerPassword.getEditText();
         EditText emailEditText = playerEmail.getEditText();
-        if(passwordEditText != null) {
+        if (passwordEditText != null) {
             passwordEditText.addTextChangedListener(notEmptyStringTextWatcher);
         }
-        if(emailEditText != null) {
+        if (emailEditText != null) {
             emailEditText.addTextChangedListener(emailTextWatcher);
         }
+    }
+
+    private void loadQuestions(Intent intent) {
+        NetworkConfiguration.getInstance()
+                .getQuestionApi()
+                .getQuestions()
+                .enqueue(new Callback<List<Question>>() {
+                    @Override
+                    public void onResponse(@NotNull Call<List<Question>> call,
+                                           @NotNull Response<List<Question>> response) {
+                        intent.putExtra("questions", (Serializable) response.body());
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<List<Question>> call, @NotNull Throwable t) {
+                        Toast toast = Toast.makeText(getApplicationContext(),
+                                "Can't connect to network!", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
     }
 
     private void setOnClickListeners() {
@@ -94,21 +122,8 @@ public class MenuFragment extends Fragment {
             cancel.setVisibility(View.GONE);
         });
         startGame.setOnClickListener((v) -> {
-            MainActivity activity = (MainActivity) getActivity();
-            if(activity != null) {
-                activity.setViewPager(this.nextFragment);
-            }
+            Intent intent = new Intent(this, QuestionActivity.class);
+            loadQuestions(intent);
         });
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_menu_fragment, container, false);
-        findElementsByIds(view);
-        setOnClickListeners();
-        setEditTextChangeListeners();
-        AdMobConfiguration.configureAdMob(getContext(), mAdView);
-        return view;
     }
 }
