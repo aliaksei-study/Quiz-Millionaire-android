@@ -93,16 +93,20 @@ public class QuestionFragment extends Fragment {
     }
 
     private void fillQuestionElements() {
-        int numberOfAnswer = 0;
-        if (question.getImagePath() != null) {
-            Picasso.get().load(this.question.getImagePath()).into(questionImage);
-        }
-        if (this.question != null) {
-            questionText.setText(this.question.getQuestionText());
-            firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-            secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-            thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-            fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
+        QuestionActivity activity = (QuestionActivity) getActivity();
+        if(activity != null) {
+            activity.updateNumberOfCorrectAnswersTextView();
+            int numberOfAnswer = 0;
+            if (question.getImagePath() != null) {
+                Picasso.get().load(this.question.getImagePath()).into(questionImage);
+            }
+            if (this.question != null) {
+                questionText.setText(this.question.getQuestionText());
+                firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+                secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+                thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+                fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
+            }
         }
     }
 
