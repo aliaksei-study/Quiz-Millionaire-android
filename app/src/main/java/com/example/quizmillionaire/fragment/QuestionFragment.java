@@ -1,6 +1,7 @@
 package com.example.quizmillionaire.fragment;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -66,6 +67,10 @@ public class QuestionFragment extends Fragment {
         fourthAnswer.setOnClickListener((view) -> {
             setAnswerButtonClickListener(fourthAnswer, 3);
         });
+        QuestionActivity questionActivity = (QuestionActivity) getActivity();
+        if(questionActivity != null) {
+            questionActivity.setFiftyPercentHelperOnClickListener();
+        }
     }
 
     public QuestionFragment(int nextFragment, int numberOfQuestions, Question question) {
@@ -94,19 +99,17 @@ public class QuestionFragment extends Fragment {
 
     private void fillQuestionElements() {
         QuestionActivity activity = (QuestionActivity) getActivity();
-        if(activity != null) {
+        if (activity != null) {
             activity.updateNumberOfCorrectAnswersTextView();
             int numberOfAnswer = 0;
             if (question.getImagePath() != null) {
                 Picasso.get().load(this.question.getImagePath()).into(questionImage);
             }
-            if (this.question != null) {
-                questionText.setText(this.question.getQuestionText());
-                firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-                secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-                thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
-                fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
-            }
+            questionText.setText(this.question.getQuestionText());
+            firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+            secondAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+            thirdAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());
+            fourthAnswer.setText(this.question.getAnswers().get(numberOfAnswer).getAnswerText());
         }
     }
 
@@ -118,16 +121,32 @@ public class QuestionFragment extends Fragment {
         List<Answer> answerList = question.getAnswers();
         for (int i = 0; i < answerList.size(); i++) {
             if (answerList.get(i).getIsCorrect()) {
-                if (i == 0) {
-                    firstAnswer.setBackgroundColor(Color.GREEN);
-                } else if (i == 1) {
-                    secondAnswer.setBackgroundColor(Color.GREEN);
-                } else if (i == 2) {
-                    thirdAnswer.setBackgroundColor(Color.GREEN);
-                } else {
-                    fourthAnswer.setBackgroundColor(Color.GREEN);
-                }
+                changeButtonColor(i, Color.GREEN);
             }
+        }
+    }
+
+    private void changeButtonColor(int index, int color) {
+        if (index == 0) {
+            firstAnswer.setBackgroundColor(color);
+        } else if (index == 1) {
+            secondAnswer.setBackgroundColor(color);
+        } else if (index == 2) {
+            thirdAnswer.setBackgroundColor(color);
+        } else {
+            fourthAnswer.setBackgroundColor(color);
+        }
+    }
+
+    private void disableButton(int index) {
+        if (index == 0) {
+            firstAnswer.setEnabled(false);
+        } else if (index == 1) {
+            secondAnswer.setEnabled(false);
+        } else if (index == 2) {
+            thirdAnswer.setEnabled(false);
+        } else {
+            fourthAnswer.setEnabled(false);
         }
     }
 
@@ -150,4 +169,21 @@ public class QuestionFragment extends Fragment {
         fourthAnswer.setEnabled(false);
     }
 
+    public void setRedBackgroundInIncorrectAnswers() {
+        final int maxBorderOfGeneratedValue = 4;
+        int questionButtonIndex;
+        int changedAnswers = 0;
+        while(changedAnswers < 2) {
+            questionButtonIndex = getRandomNumberInBorders(0, maxBorderOfGeneratedValue);
+            if(!question.getAnswers().get(questionButtonIndex).getIsCorrect()) {
+                changeButtonColor(questionButtonIndex, Color.RED);
+                disableButton(questionButtonIndex);
+                changedAnswers++;
+            }
+        }
+    }
+
+    public int getRandomNumberInBorders(int min, int max) {
+        return min + (int) (Math.random() * max);
+    }
 }

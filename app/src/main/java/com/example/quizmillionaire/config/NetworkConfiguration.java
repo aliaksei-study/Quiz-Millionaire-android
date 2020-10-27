@@ -7,7 +7,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class NetworkConfiguration {
     private static NetworkConfiguration networkConfiguration;
-    private static final String BASE_URL = "http://192.168.0.100:8080";
+    private static final String BASE_URL = "http://192.168.0.101:8080";
     private Retrofit retrofit;
 
     private NetworkConfiguration() {

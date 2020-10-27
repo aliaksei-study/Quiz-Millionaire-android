@@ -1,8 +1,12 @@
 package com.example.quizmillionaire;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +28,7 @@ public class QuestionActivity extends AppCompatActivity {
     private ImageButton dislikeQuestion;
     private ImageButton likeQuestion;
     private TextView numberOfCorrectAnswers;
+    private SectionsStatePagerAdapter sectionsStatePagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,12 +54,13 @@ public class QuestionActivity extends AppCompatActivity {
     }
 
     private void setupViewPager(NonSwipeableViewPager viewPager) {
-        SectionsStatePagerAdapter adapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
+        sectionsStatePagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         viewPager.setPagingEnabled(false);
         for (int i = 0; i < this.questions.size(); i++) {
-            adapter.addFragment(new QuestionFragment(i + 1, getNumberOfQuestions(), getQuestion(i)), "Question" + i + 1);
+            sectionsStatePagerAdapter.addFragment(new QuestionFragment(i + 1,
+                    getNumberOfQuestions(), getQuestion(i)), "Question" + i + 1);
         }
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(sectionsStatePagerAdapter);
     }
 
     public void setViewPager(int fragmentNumber) {
@@ -90,5 +96,14 @@ public class QuestionActivity extends AppCompatActivity {
     public void updateNumberOfCorrectAnswersTextView() {
         numberOfCorrectAnswers.setText(getString(R.string.correct_answers_text_view, getNumberOfQuestion(),
                 getNumberOfQuestions()));
+    }
+
+    public void setFiftyPercentHelperOnClickListener() {
+        this.fiftyPercentHelper.setOnClickListener((view) -> {
+            QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
+                    .getItem(numberOfQuestion);
+            questionFragment.setRedBackgroundInIncorrectAnswers();
+            fiftyPercentHelper.setVisibility(ImageButton.GONE);
+        });
     }
 }

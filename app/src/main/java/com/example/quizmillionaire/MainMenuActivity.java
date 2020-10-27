@@ -1,6 +1,7 @@
 package com.example.quizmillionaire;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -49,6 +50,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        moveTaskToBack(true);
+        finish();
     }
 
     private void findElementsByIds() {
