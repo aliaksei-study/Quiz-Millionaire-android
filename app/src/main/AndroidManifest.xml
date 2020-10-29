@@ -26,6 +26,10 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
+            android:name=".LeaderBoardActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
             android:name=".MainMenuActivity"
             android:screenOrientation="portrait">
             <intent-filter>

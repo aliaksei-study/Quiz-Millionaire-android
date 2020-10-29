@@ -6,6 +6,28 @@
     android:background="@drawable/main_background_600_1200"
     android:orientation="vertical">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/finish_game_toolbar"
+        android:layout_width="match_parent"
+        android:layout_marginEnd="10dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/add_question_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorPrimary"
+                android:contentDescription="@string/add_question_asset"
+                android:src="@drawable/ic_add_circle_outline_white_36dp" />
+        </RelativeLayout>
+    </androidx.appcompat.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -18,32 +40,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:fontFamily="@font/lobster_regular"
             android:textColor="@color/whiteColor"
             android:textSize="28sp"
-            android:textStyle="italic" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/first_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_grade_white_48dp"
-                android:contentDescription="@string/progress_star"/>
+                android:contentDescription="@string/progress_star"
+                android:src="@drawable/baseline_grade_white_48dp" />
+
             <ImageView
                 android:id="@+id/second_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_grade_white_48dp"
-                android:contentDescription="@string/progress_star"/>
+                android:contentDescription="@string/progress_star"
+                android:src="@drawable/baseline_grade_white_48dp" />
+
             <ImageView
                 android:id="@+id/third_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/baseline_grade_white_48dp"
-                android:contentDescription="@string/progress_star"/>
+                android:contentDescription="@string/progress_star"
+                android:src="@drawable/baseline_grade_white_48dp" />
         </LinearLayout>
 
         <Button
@@ -57,7 +83,8 @@
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="5"
-            android:text="@string/leaderboard"
+            android:fontFamily="@font/lobster_regular"
+            android:text="@string/leader_board"
             android:textAllCaps="false"
             android:textColor="@color/whiteColor"
             android:textSize="30sp" />
@@ -70,6 +97,7 @@
             android:layout_marginBottom="2dp"
             android:background="@drawable/menu_button_shape"
             android:shadowColor="@color/lightGrayColor"
+            android:fontFamily="@font/lobster_regular"
             android:shadowDx="0"
             android:shadowDy="0"
             android:shadowRadius="5"

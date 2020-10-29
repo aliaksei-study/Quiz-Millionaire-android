@@ -66,9 +66,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void setEditTextChangeListeners() {
         ErrorTextWatcher notEmptyStringTextWatcher = new NotEmptyStringTextWatcher(playerPassword,
-                "This field is required", startGame, cancel);
+                "Поле обязатиельно", startGame, cancel);
         ErrorTextWatcher emailTextWatcher = new EmailTextWatcher(playerEmail,
-                "Invalid email", startGame, cancel);
+                "Неверный адрес", startGame, cancel);
         EditText passwordEditText = playerPassword.getEditText();
         EditText emailEditText = playerEmail.getEditText();
         if (passwordEditText != null) {
@@ -94,7 +94,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NotNull Call<List<Question>> call, @NotNull Throwable t) {
                         Toast toast = Toast.makeText(getApplicationContext(),
-                                "Can't connect to network!", Toast.LENGTH_LONG);
+                                "Нет подключения к интернету!", Toast.LENGTH_LONG);
                         toast.show();
                     }
                 });

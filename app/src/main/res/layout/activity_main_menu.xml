@@ -26,11 +26,13 @@
         <Button
             android:id="@+id/sign_in"
             style="@style/MainMenuButton"
+            android:fontFamily="@font/lobster_regular"
             android:text="@string/sign_in" />
 
         <Button
             android:id="@+id/sign_up"
             style="@style/MainMenuButton"
+            android:fontFamily="@font/lobster_regular"
             android:text="@string/sign_up" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/whiteColor"
                 android:hint="@string/player_email"
+                android:fontFamily="@font/lobster_regular"
                 android:inputType="textWebEmailAddress"
                 android:singleLine="true"
                 android:textColor="@color/whiteColor" />
@@ -63,6 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/whiteColor"
+                android:fontFamily="@font/lobster_regular"
                 android:hint="@string/player_password"
                 android:inputType="textPassword"
                 android:singleLine="true"
@@ -72,12 +76,14 @@
         <Button
             android:id="@+id/start_game"
             android:visibility="gone"
+            android:fontFamily="@font/lobster_regular"
             style="@style/MainMenuButton"
             android:text="@string/start_game" />
 
         <Button
             android:id="@+id/cancel"
             style="@style/MainMenuButton"
+            android:fontFamily="@font/lobster_regular"
             android:text="@string/cancel"
             android:visibility="gone" />
 

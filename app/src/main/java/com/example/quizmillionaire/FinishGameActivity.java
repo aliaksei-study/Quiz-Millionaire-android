@@ -59,8 +59,12 @@ public class FinishGameActivity extends AppCompatActivity {
     }
 
     private void setOnClickListeners() {
-        tryAgain.setOnClickListener((v) -> {
+        tryAgain.setOnClickListener((view) -> {
             Intent intent = new Intent(this, MainMenuActivity.class);
+            startActivity(intent);
+        });
+        leaderBoard.setOnClickListener((view) -> {
+            Intent intent = new Intent(this, LeaderBoardActivity.class);
             startActivity(intent);
         });
     }
