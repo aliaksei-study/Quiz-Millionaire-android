@@ -7,9 +7,11 @@ import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 
 public interface QuestionAPI {
-    @GET("/questions")
-    Call<List<Question>> getQuestions();
-
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/questions")
+    Call<List<Question>> getQuestions(@Header("Authorization") String auth);
 }

@@ -1,5 +1,6 @@
 package com.example.quizmillionaire.config;
 
+import com.example.quizmillionaire.api.AuthAPI;
 import com.example.quizmillionaire.api.QuestionAPI;
 
 import retrofit2.Retrofit;
@@ -26,5 +27,9 @@ public class NetworkConfiguration {
 
     public QuestionAPI getQuestionApi() {
         return retrofit.create(QuestionAPI.class);
+    }
+
+    public AuthAPI getAuthApi() {
+        return retrofit.create(AuthAPI.class);
     }
 }

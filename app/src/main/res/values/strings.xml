@@ -22,4 +22,6 @@
     <string name="finish_game_results_text_view">Поздравляем! Вы набрали %1$d из %2$d баллов.</string>
     <string name="back_button">back button</string>
     <string name="leader_board">Таблица лидеров</string>
+    <string name="create_account">Создать аккаунт</string>
+    <string name="adding_question">Добавление вопроса</string>
 </resources>

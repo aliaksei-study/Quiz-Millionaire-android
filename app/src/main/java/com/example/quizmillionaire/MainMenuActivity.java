@@ -1,16 +1,18 @@
 package com.example.quizmillionaire;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quizmillionaire.api.AuthAPI;
+import com.example.quizmillionaire.api.request.PrincipalAuthRequest;
+import com.example.quizmillionaire.api.response.JwtResponse;
 import com.example.quizmillionaire.config.AdMobConfiguration;
 import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.model.Question;
@@ -31,12 +33,11 @@ import retrofit2.Response;
 
 public class MainMenuActivity extends AppCompatActivity {
     private AdView mAdView;
-    private Button signIn;
-    private Button signUp;
+    private CheckBox checkBox;
     private TextInputLayout playerEmail;
     private TextInputLayout playerPassword;
     private Button startGame;
-    private Button cancel;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,20 +56,18 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void findElementsByIds() {
-        signIn = findViewById(R.id.sign_in);
-        signUp = findViewById(R.id.sign_up);
         playerEmail = findViewById(R.id.email);
         playerPassword = findViewById(R.id.password);
         startGame = findViewById(R.id.start_game);
-        cancel = findViewById(R.id.cancel);
         mAdView = findViewById(R.id.adView);
+        checkBox = findViewById(R.id.register_check_box);
     }
 
     private void setEditTextChangeListeners() {
         ErrorTextWatcher notEmptyStringTextWatcher = new NotEmptyStringTextWatcher(playerPassword,
-                "Поле обязатиельно", startGame, cancel);
+                "Поле обязатиельно", startGame);
         ErrorTextWatcher emailTextWatcher = new EmailTextWatcher(playerEmail,
-                "Неверный адрес", startGame, cancel);
+                "Неверный адрес", startGame);
         EditText passwordEditText = playerPassword.getEditText();
         EditText emailEditText = playerEmail.getEditText();
         if (passwordEditText != null) {
@@ -79,10 +78,11 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    private void loadQuestions(Intent intent) {
-        NetworkConfiguration.getInstance()
+    private void loadQuestions(Intent intent, String jwtToken) {
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration
                 .getQuestionApi()
-                .getQuestions()
+                .getQuestions("Bearer " + jwtToken)
                 .enqueue(new Callback<List<Question>>() {
                     @Override
                     public void onResponse(@NotNull Call<List<Question>> call,
@@ -100,33 +100,43 @@ public class MainMenuActivity extends AppCompatActivity {
                 });
     }
 
+    private void registerPrincipal(Intent intent) {
+        PrincipalAuthRequest authRequest = new PrincipalAuthRequest
+                (playerEmail.getEditText().getText().toString(),
+                        playerPassword.getEditText().getText().toString());
+        AuthAPI authAPI = NetworkConfiguration.getInstance().getAuthApi();
+        Call<JwtResponse> responseCall = checkBox.isChecked() ? authAPI.register(authRequest) :
+                authAPI.login(authRequest);
+        responseCall.enqueue(new Callback<JwtResponse>() {
+            @Override
+            public void onResponse(Call<JwtResponse> call, Response<JwtResponse> response) {
+                if(response.body() != null) {
+                    loadQuestions(intent, response.body().getJwtToken());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JwtResponse> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Нет подключения к интернету", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void setOnClickListeners() {
-        signIn.setOnClickListener((v) -> {
-            playerEmail.setVisibility(View.VISIBLE);
-            signIn.setVisibility(View.GONE);
-            signUp.setVisibility(View.GONE);
-            startGame.setVisibility(View.VISIBLE);
-            cancel.setVisibility(View.VISIBLE);
-        });
-        signUp.setOnClickListener((v) -> {
-            playerEmail.setVisibility(View.VISIBLE);
-            playerPassword.setVisibility(View.VISIBLE);
-            signIn.setVisibility(View.GONE);
-            startGame.setVisibility(View.VISIBLE);
-            signUp.setVisibility(View.GONE);
-            cancel.setVisibility(View.VISIBLE);
-        });
-        cancel.setOnClickListener((v) -> {
-            playerEmail.setVisibility(View.GONE);
-            playerPassword.setVisibility(View.GONE);
-            signIn.setVisibility(View.VISIBLE);
-            signUp.setVisibility(View.VISIBLE);
-            startGame.setVisibility(View.GONE);
-            cancel.setVisibility(View.GONE);
-        });
         startGame.setOnClickListener((v) -> {
-            Intent intent = new Intent(this, QuestionActivity.class);
-            loadQuestions(intent);
+            System.out.println(playerEmail.getEditText().getText().toString());
+            System.out.println(playerPassword.getEditText().getText().toString());
+            if(!(isFieldEmpty(playerEmail.getEditText().getText().toString()) ||
+                    isFieldEmpty(playerPassword.getEditText().getText().toString()))) {
+                Intent intent = new Intent(this, QuestionActivity.class);
+                registerPrincipal(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "Поля должны быть заполнены!", Toast.LENGTH_LONG).show();
+            }
         });
+    }
+
+    private boolean isFieldEmpty(String field) {
+        return field.equals("");
     }
 }

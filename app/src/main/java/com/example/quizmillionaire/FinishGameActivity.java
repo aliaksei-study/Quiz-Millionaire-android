@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.example.quizmillionaire.config.AdMobConfiguration;
 import com.google.android.gms.ads.AdView;
 
 public class FinishGameActivity extends AppCompatActivity {
+    private ImageView addQuestionImageView;
     private TextView textView;
     private ImageView firstStar;
     private ImageView secondStar;
@@ -67,6 +69,10 @@ public class FinishGameActivity extends AppCompatActivity {
             Intent intent = new Intent(this, LeaderBoardActivity.class);
             startActivity(intent);
         });
+        addQuestionImageView.setOnClickListener((view) -> {
+            Intent intent = new Intent(this, AddingQuestionActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void findViewsById() {
@@ -77,5 +83,6 @@ public class FinishGameActivity extends AppCompatActivity {
         leaderBoard = findViewById(R.id.leaderboard);
         tryAgain = findViewById(R.id.try_again);
         adView = findViewById(R.id.finish_adView);
+        addQuestionImageView = findViewById(R.id.add_question_image);
     }
 }
