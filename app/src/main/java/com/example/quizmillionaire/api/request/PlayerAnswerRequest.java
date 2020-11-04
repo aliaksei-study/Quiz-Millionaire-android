@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class PrincipalAuthRequest {
-    private String email;
-    private String password;
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+public class PlayerAnswerRequest {
+    private Long answerId;
+    private Long questionId;
 }

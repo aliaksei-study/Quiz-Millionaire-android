@@ -11,7 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quizmillionaire.api.AuthAPI;
-import com.example.quizmillionaire.api.request.PrincipalAuthRequest;
+import com.example.quizmillionaire.api.request.PlayerAuthRequest;
+import com.example.quizmillionaire.api.response.ApiExceptionResponse;
 import com.example.quizmillionaire.api.response.JwtResponse;
 import com.example.quizmillionaire.config.AdMobConfiguration;
 import com.example.quizmillionaire.config.NetworkConfiguration;
@@ -19,14 +20,17 @@ import com.example.quizmillionaire.model.Question;
 import com.example.quizmillionaire.utils.validation.EmailTextWatcher;
 import com.example.quizmillionaire.utils.validation.ErrorTextWatcher;
 import com.example.quizmillionaire.utils.validation.NotEmptyStringTextWatcher;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.ads.AdView;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,7 +69,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void setEditTextChangeListeners() {
         ErrorTextWatcher notEmptyStringTextWatcher = new NotEmptyStringTextWatcher(playerPassword,
-                "Поле обязатиельно", startGame);
+                "Поле обязательно", startGame);
         ErrorTextWatcher emailTextWatcher = new EmailTextWatcher(playerEmail,
                 "Неверный адрес", startGame);
         EditText passwordEditText = playerPassword.getEditText();
@@ -87,21 +91,25 @@ public class MainMenuActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NotNull Call<List<Question>> call,
                                            @NotNull Response<List<Question>> response) {
-                        intent.putExtra("questions", (Serializable) response.body());
-                        startActivity(intent);
+                        if(response.isSuccessful()) {
+                            intent.putExtra("questions", (Serializable) response.body());
+                            startActivity(intent);
+                        } else {
+                            if(response.errorBody() != null) {
+                                showResponseErrorMessage(response.errorBody());
+                            }
+                        }
                     }
 
                     @Override
                     public void onFailure(@NotNull Call<List<Question>> call, @NotNull Throwable t) {
-                        Toast toast = Toast.makeText(getApplicationContext(),
-                                "Нет подключения к интернету!", Toast.LENGTH_LONG);
-                        toast.show();
+                        Toast.makeText(getApplicationContext(), "Ошибка сервера", Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
     private void registerPrincipal(Intent intent) {
-        PrincipalAuthRequest authRequest = new PrincipalAuthRequest
+        PlayerAuthRequest authRequest = new PlayerAuthRequest
                 (playerEmail.getEditText().getText().toString(),
                         playerPassword.getEditText().getText().toString());
         AuthAPI authAPI = NetworkConfiguration.getInstance().getAuthApi();
@@ -109,23 +117,37 @@ public class MainMenuActivity extends AppCompatActivity {
                 authAPI.login(authRequest);
         responseCall.enqueue(new Callback<JwtResponse>() {
             @Override
-            public void onResponse(Call<JwtResponse> call, Response<JwtResponse> response) {
-                if(response.body() != null) {
-                    loadQuestions(intent, response.body().getJwtToken());
+            public void onResponse(@NotNull Call<JwtResponse> call, @NotNull Response<JwtResponse> response) {
+                if(response.isSuccessful()) {
+                    String jwtToken = response.body().getJwtToken();
+                    NetworkConfiguration.getInstance().setJwtToken("Bearer " + jwtToken);
+                    loadQuestions(intent, jwtToken);
+                } else {
+                    if(response.errorBody() != null) {
+                        showResponseErrorMessage(response.errorBody());
+                    }
                 }
             }
 
             @Override
-            public void onFailure(Call<JwtResponse> call, Throwable t) {
+            public void onFailure(@NotNull Call<JwtResponse> call, @NotNull Throwable t) {
                 Toast.makeText(getApplicationContext(), "Нет подключения к интернету", Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    private void showResponseErrorMessage(ResponseBody responseBody) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            ApiExceptionResponse exceptionResponse = objectMapper.readValue(responseBody.string(), ApiExceptionResponse.class);
+            Toast.makeText(getApplicationContext(), exceptionResponse.getMessage(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void setOnClickListeners() {
         startGame.setOnClickListener((v) -> {
-            System.out.println(playerEmail.getEditText().getText().toString());
-            System.out.println(playerPassword.getEditText().getText().toString());
             if(!(isFieldEmpty(playerEmail.getEditText().getText().toString()) ||
                     isFieldEmpty(playerPassword.getEditText().getText().toString()))) {
                 Intent intent = new Intent(this, QuestionActivity.class);

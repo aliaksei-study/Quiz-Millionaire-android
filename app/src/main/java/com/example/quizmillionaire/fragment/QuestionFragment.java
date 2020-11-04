@@ -17,11 +17,20 @@ import androidx.fragment.app.Fragment;
 
 import com.example.quizmillionaire.QuestionActivity;
 import com.example.quizmillionaire.R;
+import com.example.quizmillionaire.api.request.PlayerAnswerRequest;
+import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.model.Answer;
+import com.example.quizmillionaire.model.AnswerStatistics;
 import com.example.quizmillionaire.model.Question;
 import com.squareup.picasso.Picasso;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuestionFragment extends Fragment {
     private ImageView questionImage;
@@ -56,19 +65,27 @@ public class QuestionFragment extends Fragment {
 
     private void setOnClickListeners() {
         firstAnswer.setOnClickListener((view) -> {
+            Long numberOfAnswer = getNumberOfAnswerByAnswerText(firstAnswer.getText().toString());
             setAnswerButtonClickListener(firstAnswer, 0);
+            sendAnswerStatistics(this.question.getId(), numberOfAnswer);
         });
         secondAnswer.setOnClickListener((view) -> {
+            Long numberOfAnswer = getNumberOfAnswerByAnswerText(secondAnswer.getText().toString());
             setAnswerButtonClickListener(secondAnswer, 1);
+            sendAnswerStatistics(this.question.getId(), numberOfAnswer);
         });
         thirdAnswer.setOnClickListener((view) -> {
+            Long numberOfAnswer = getNumberOfAnswerByAnswerText(thirdAnswer.getText().toString());
             setAnswerButtonClickListener(thirdAnswer, 2);
+            sendAnswerStatistics(this.question.getId(), numberOfAnswer);
         });
         fourthAnswer.setOnClickListener((view) -> {
+            Long numberOfAnswer = getNumberOfAnswerByAnswerText(fourthAnswer.getText().toString());
             setAnswerButtonClickListener(fourthAnswer, 3);
+            sendAnswerStatistics(this.question.getId(), numberOfAnswer);
         });
         QuestionActivity questionActivity = (QuestionActivity) getActivity();
-        if(questionActivity != null) {
+        if (questionActivity != null) {
             questionActivity.setFiftyPercentHelperOnClickListener();
         }
     }
@@ -173,9 +190,9 @@ public class QuestionFragment extends Fragment {
         final int maxBorderOfGeneratedValue = 4;
         int questionButtonIndex;
         int changedAnswers = 0;
-        while(changedAnswers < 2) {
+        while (changedAnswers < 2) {
             questionButtonIndex = getRandomNumberInBorders(0, maxBorderOfGeneratedValue);
-            if(!question.getAnswers().get(questionButtonIndex).getIsCorrect()) {
+            if (!question.getAnswers().get(questionButtonIndex).getIsCorrect()) {
                 changeButtonColor(questionButtonIndex, Color.RED);
                 disableButton(questionButtonIndex);
                 changedAnswers++;
@@ -185,5 +202,35 @@ public class QuestionFragment extends Fragment {
 
     public int getRandomNumberInBorders(int min, int max) {
         return min + (int) (Math.random() * max);
+    }
+
+    private Long getNumberOfAnswerByAnswerText(String answerText) {
+        List<Answer> answers = question.getAnswers();
+        for (int i = 0; i < answers.size(); i++) {
+            Answer answer = answers.get(i);
+            if (answer.getAnswerText().equals(answerText)) {
+                return answer.getId();
+            }
+        }
+        return 0L;
+    }
+
+    private void sendAnswerStatistics(Long questionId, Long answerId) {
+        PlayerAnswerRequest playerAnswerRequest = new PlayerAnswerRequest(answerId, questionId);
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration.getAnswerStatisticsApi()
+                .saveAnswerStatistics(networkConfiguration.getJwtToken(),
+                        playerAnswerRequest)
+                .enqueue(new Callback<AnswerStatistics>() {
+                    @Override
+                    public void onResponse(@NotNull Call<AnswerStatistics> call, @NotNull Response<AnswerStatistics> response) {
+                        //todo debug message
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<AnswerStatistics> call, @NotNull Throwable t) {
+                        //todo debug message
+                    }
+                });
     }
 }

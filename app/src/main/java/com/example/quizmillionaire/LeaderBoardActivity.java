@@ -23,18 +23,7 @@ public class LeaderBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        List<Player> players = Stream.of(new Player("ff", "ff", null),
-                new Player("alexbeljak99@gmail.com", "ff", null),
-                new Player("1234567898347349", "ff", null),
-                new Player("dfvsd", "ff", null),
-                new Player("ff", "ff", null),
-                new Player("ff", "ff", null),
-                new Player("ff", "ff", null),
-                new Player("ff", "ff", null),
-                new Player("ff", "ff", null),
-                new Player("ff", "ff", null),
-                new Player("ff", "ff", null)
-                ).collect(Collectors.toList());
+        List<Player> players = Stream.of(new Player("ff")).collect(Collectors.toList());
         setContentView(R.layout.leaderboard_activity);
         backButton = findViewById(R.id.back_button);
         playerLeaderBoard = findViewById(R.id.player_leaderboard);
