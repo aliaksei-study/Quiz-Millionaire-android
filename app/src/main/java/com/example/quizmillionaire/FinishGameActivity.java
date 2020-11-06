@@ -6,13 +6,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.quizmillionaire.api.request.StatisticsRequest;
 import com.example.quizmillionaire.config.AdMobConfiguration;
+import com.example.quizmillionaire.config.NetworkConfiguration;
+import com.example.quizmillionaire.model.Player;
+import com.example.quizmillionaire.model.Statistics;
 import com.google.android.gms.ads.AdView;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FinishGameActivity extends AppCompatActivity {
     private ImageView addQuestionImageView;
@@ -37,6 +52,7 @@ public class FinishGameActivity extends AppCompatActivity {
         AdMobConfiguration.configureAdMob(getApplicationContext(), adView);
         initializeView();
         setOnClickListeners();
+        sendStatistics();
     }
 
     @Override
@@ -67,7 +83,7 @@ public class FinishGameActivity extends AppCompatActivity {
         });
         leaderBoard.setOnClickListener((view) -> {
             Intent intent = new Intent(this, LeaderBoardActivity.class);
-            startActivity(intent);
+            sendPlayersToLeaderBoardActivity(intent);
         });
         addQuestionImageView.setOnClickListener((view) -> {
             Intent intent = new Intent(this, AddingQuestionActivity.class);
@@ -84,5 +100,47 @@ public class FinishGameActivity extends AppCompatActivity {
         tryAgain = findViewById(R.id.try_again);
         adView = findViewById(R.id.finish_adView);
         addQuestionImageView = findViewById(R.id.add_question_image);
+    }
+
+    private void sendStatistics() {
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        StatisticsRequest statisticsRequest = new StatisticsRequest(this.numberOfAnsweredQuestions);
+        networkConfiguration.getStatisticsApi()
+                .saveStatistics(networkConfiguration.getJwtToken(), statisticsRequest)
+                .enqueue(new Callback<Statistics>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Statistics> call,
+                                           @NotNull Response<Statistics> response) {
+                        //todo add logger
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<Statistics> call, @NotNull Throwable t) {
+                        //todo add logger
+                    }
+                });
+    }
+
+    private void sendPlayersToLeaderBoardActivity(Intent intent) {
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration.getStatisticsApi()
+                .getStatistics(networkConfiguration.getJwtToken())
+                .enqueue(new Callback<List<Statistics>>() {
+                    @Override
+                    public void onResponse(@NotNull Call<List<Statistics>> call,
+                                           @NotNull Response<List<Statistics>> response) {
+                        if(response.isSuccessful()) {
+                            intent.putExtra("statistics", (Serializable) response.body());
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Ошибка сервера", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<List<Statistics>> call, @NotNull Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Ошибка", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

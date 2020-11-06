@@ -1,6 +1,7 @@
 package com.example.quizmillionaire.model;
 
 import com.example.quizmillionaire.model.enumeration.Difficulty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 

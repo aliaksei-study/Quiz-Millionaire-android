@@ -11,39 +11,40 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.quizmillionaire.R;
 import com.example.quizmillionaire.model.Player;
+import com.example.quizmillionaire.model.Statistics;
 
 import java.util.List;
 
-public class PlayerLeaderBoardAdapter extends RecyclerView.Adapter<PlayerLeaderBoardAdapter.PlayerLeaderBoardViewHolder> {
-    private final List<Player> players;
+public class StatisticsLeaderBoardAdapter extends RecyclerView.Adapter<StatisticsLeaderBoardAdapter.StatisticsLeaderBoardViewHolder> {
+    private final List<Statistics> statistics;
 
-    public PlayerLeaderBoardAdapter(List<Player> players) {
-        this.players = players;
+    public StatisticsLeaderBoardAdapter(List<Statistics> statistics) {
+        this.statistics = statistics;
     }
 
     @NonNull
     @Override
-    public PlayerLeaderBoardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public StatisticsLeaderBoardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         int layoutIdForLeaderBoardItem = R.layout.leaderboard_item;
 
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(layoutIdForLeaderBoardItem, parent, false);
 
-        return new PlayerLeaderBoardViewHolder(view);
+        return new StatisticsLeaderBoardViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlayerLeaderBoardViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull StatisticsLeaderBoardViewHolder holder, int position) {
         holder.bindView(position);
     }
 
     @Override
     public int getItemCount() {
-        return players.size() + 1;
+        return statistics.size() + 1;
     }
 
-    class PlayerLeaderBoardViewHolder extends RecyclerView.ViewHolder {
+    class StatisticsLeaderBoardViewHolder extends RecyclerView.ViewHolder {
         private static final String POSITION_HEADER = "№";
         private static final String PLAYER_EMAIL_HEADER = "Электронная почта";
         private static final String PLAYER_SCORE_HEADER = "Баллы";
@@ -52,7 +53,7 @@ public class PlayerLeaderBoardAdapter extends RecyclerView.Adapter<PlayerLeaderB
         private final TextView playerEmail;
         private final TextView playerScore;
 
-        public PlayerLeaderBoardViewHolder(@NonNull View itemView) {
+        public StatisticsLeaderBoardViewHolder(@NonNull View itemView) {
             super(itemView);
 
             playerPosition = itemView.findViewById(R.id.player_position);
@@ -64,8 +65,9 @@ public class PlayerLeaderBoardAdapter extends RecyclerView.Adapter<PlayerLeaderB
             if (position == 0) {
                 fillPlayerLeaderBoard(POSITION_HEADER, PLAYER_EMAIL_HEADER, PLAYER_SCORE_HEADER);
             } else {
-                Player player = players.get(position - 1);
-                fillPlayerLeaderBoard(String.valueOf(position), player.getUsername(), String.valueOf(0));
+                Statistics statistic = statistics.get(position - 1);
+                fillPlayerLeaderBoard(String.valueOf(position), statistic.getPlayer().getUsername(),
+                        String.valueOf(statistic.getScore()));
             }
         }
 
