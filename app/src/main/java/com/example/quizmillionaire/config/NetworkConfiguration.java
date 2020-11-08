@@ -2,6 +2,7 @@ package com.example.quizmillionaire.config;
 
 import com.example.quizmillionaire.api.AnswerStatisticsAPI;
 import com.example.quizmillionaire.api.AuthAPI;
+import com.example.quizmillionaire.api.CategoryApi;
 import com.example.quizmillionaire.api.PlayerApi;
 import com.example.quizmillionaire.api.QuestionAPI;
 import com.example.quizmillionaire.api.StatisticsApi;
@@ -55,5 +56,9 @@ public class NetworkConfiguration {
 
     public StatisticsApi getStatisticsApi() {
         return retrofit.create(StatisticsApi.class);
+    }
+
+    public CategoryApi getCategoryApi() {
+        return retrofit.create(CategoryApi.class);
     }
 }

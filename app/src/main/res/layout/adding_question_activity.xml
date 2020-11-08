@@ -38,12 +38,98 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
         android:layout_weight="9">
-        <ImageView
+        <TextView
+            android:id="@+id/add_question_image"
             android:layout_width="match_parent"
             android:layout_height="220dp"
-            android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
-            android:tooltipText="Нажмите для загрузки изображения"/>
+            android:text="Нажмите для загрузки фотографии вопроса..."
+            android:fontFamily="@font/lobster_regular"
+            android:gravity="center"
+            android:textColor="@color/whiteColor"
+            android:textSize="30sp"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_question_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteColor"
+                android:hint="@string/player_email"
+                android:inputType="text"
+                android:singleLine="false"
+                android:textColor="@color/whiteColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_first_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteColor"
+                android:hint="Первый ответ"
+                android:inputType="text"
+                android:singleLine="false"
+                android:textColor="@color/whiteColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_second_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteColor"
+                android:hint="Второй ответ"
+                android:inputType="text"
+                android:singleLine="false"
+                android:textColor="@color/whiteColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_third_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteColor"
+                android:hint="Третий ответ"
+                android:inputType="text"
+                android:singleLine="false"
+                android:textColor="@color/whiteColor" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/add_fourth_answer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/whiteColor"
+                android:hint="Четвертый ответ"
+                android:inputType="text"
+                android:singleLine="false"
+                android:textColor="@color/whiteColor" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </LinearLayout>

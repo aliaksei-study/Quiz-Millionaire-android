@@ -86,7 +86,10 @@ public class QuestionFragment extends Fragment {
         });
         QuestionActivity questionActivity = (QuestionActivity) getActivity();
         if (questionActivity != null) {
+            questionActivity.unhideLikeDislikeImageButton();
             questionActivity.setFiftyPercentHelperOnClickListener();
+            questionActivity.setLikeQuestionOnClickListener();
+            questionActivity.setDislikeQuestionOnClickListener();
         }
     }
 
@@ -112,6 +115,10 @@ public class QuestionFragment extends Fragment {
     public void onPause() {
         super.onPause();
         handler.removeCallbacks(runnable);
+    }
+
+    public Long getCurrentQuestionId() {
+        return this.question.getId();
     }
 
     private void fillQuestionElements() {

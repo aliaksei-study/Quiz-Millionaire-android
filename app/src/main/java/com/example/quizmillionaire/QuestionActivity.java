@@ -8,16 +8,26 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.quizmillionaire.adapter.SectionsStatePagerAdapter;
+import com.example.quizmillionaire.api.request.LikedQuestionRequest;
+import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.customviewpager.NonSwipeableViewPager;
 import com.example.quizmillionaire.fragment.QuestionFragment;
+import com.example.quizmillionaire.model.Player;
 import com.example.quizmillionaire.model.Question;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuestionActivity extends AppCompatActivity {
     private NonSwipeableViewPager viewPager;
@@ -105,5 +115,66 @@ public class QuestionActivity extends AppCompatActivity {
             questionFragment.setRedBackgroundInIncorrectAnswers();
             fiftyPercentHelper.setVisibility(ImageButton.GONE);
         });
+    }
+
+    public void setLikeQuestionOnClickListener() {
+        this.likeQuestion.setOnClickListener((view) -> {
+            QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
+                    .getItem(numberOfQuestion);
+            likeQuestion.setVisibility(ImageButton.GONE);
+            sendLikeQuestion(questionFragment.getCurrentQuestionId());
+        });
+    }
+
+    public void setDislikeQuestionOnClickListener() {
+        this.dislikeQuestion.setOnClickListener((view) -> {
+            QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
+                    .getItem(numberOfQuestion);
+            dislikeQuestion.setVisibility(ImageButton.GONE);
+            sendDislikeQuestion(questionFragment.getCurrentQuestionId());
+        });
+    }
+
+    public void unhideLikeDislikeImageButton() {
+        likeQuestion.setVisibility(ImageButton.VISIBLE);
+        dislikeQuestion.setVisibility(ImageButton.VISIBLE);
+    }
+
+    private void sendLikeQuestion(Long questionId) {
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration.getPlayerApi()
+                .likeQuestion(networkConfiguration.getJwtToken(), new LikedQuestionRequest(questionId))
+                .enqueue(new Callback<Player>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Player> call,
+                                           @NotNull Response<Player> response) {
+                        //todo logger
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<Player> call, @NotNull Throwable t) {
+                        Toast.makeText(getApplicationContext(),
+                                "Error happened while was trying to like question!", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void sendDislikeQuestion(Long questionId) {
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration.getPlayerApi()
+                .dislikeQuestion(networkConfiguration.getJwtToken(), new LikedQuestionRequest(questionId))
+                .enqueue(new Callback<Player>() {
+                    @Override
+                    public void onResponse(@NotNull Call<Player> call,
+                                           @NotNull Response<Player> response) {
+                        //todo logger
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<Player> call, @NotNull Throwable t) {
+                        Toast.makeText(getApplicationContext(),
+                                "Error happened while was trying to dislike question!", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }
