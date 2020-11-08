@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/main_background_600_1200"
     android:orientation="vertical">
 
@@ -20,116 +19,210 @@
                 android:id="@+id/back_button_finish_game"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_keyboard_backspace_white_36dp"
                 android:background="@color/colorPrimaryDark"
-                android:contentDescription="@string/back_button"/>
+                android:contentDescription="@string/back_button"
+                android:src="@drawable/ic_keyboard_backspace_white_36dp" />
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="9"
                 android:fontFamily="@font/lobster_regular"
                 android:text="@string/adding_question"
-                android:textSize="28sp"
+                android:textAlignment="center"
                 android:textColor="@color/whiteColor"
-                android:textAlignment="center" />
+                android:textSize="28sp" />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
-        android:orientation="vertical"
-        android:layout_weight="9">
-        <TextView
-            android:id="@+id/add_question_image"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            android:background="@color/colorPrimaryDark"
-            android:text="Нажмите для загрузки фотографии вопроса..."
-            android:fontFamily="@font/lobster_regular"
-            android:gravity="center"
-            android:textColor="@color/whiteColor"
-            android:textSize="30sp"/>
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_question_text"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            >
+            android:layout_margin="20dp"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <TextView
+                android:id="@+id/add_question_image"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:background="@color/colorPrimaryDark"
+                android:fontFamily="@font/lobster_regular"
+                android:gravity="center"
+                android:text="@string/press_to_load_image"
+                android:textColor="@color/whiteColor"
+                android:textSize="30sp" />
+
+            <Spinner
+                android:id="@+id/question_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_question_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/whiteColor"
+                    android:hint="@string/add_question_text"
+                    android:inputType="text"
+                    android:singleLine="false"
+                    android:textColor="@color/whiteColor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteColor"
-                android:hint="@string/player_email"
-                android:inputType="text"
-                android:singleLine="false"
-                android:textColor="@color/whiteColor" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_first_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+                <CheckBox
+                    android:id="@+id/first_correct_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/whiteColor" />
 
-            <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_first_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/whiteColor"
+                        android:hint="@string/first_answer"
+                        android:inputType="text"
+                        android:singleLine="false"
+                        android:textColor="@color/whiteColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteColor"
-                android:hint="Первый ответ"
-                android:inputType="text"
-                android:singleLine="false"
-                android:textColor="@color/whiteColor" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_second_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+                <CheckBox
+                    android:id="@+id/second_correct_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/whiteColor" />
 
-            <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_second_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/whiteColor"
+                        android:hint="@string/second_answer"
+                        android:inputType="text"
+                        android:singleLine="false"
+                        android:textColor="@color/whiteColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteColor"
-                android:hint="Второй ответ"
-                android:inputType="text"
-                android:singleLine="false"
-                android:textColor="@color/whiteColor" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_third_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+                <CheckBox
+                    android:id="@+id/third_correct_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/whiteColor" />
 
-            <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_third_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/whiteColor"
+                        android:hint="@string/third_answer"
+                        android:inputType="text"
+                        android:singleLine="false"
+                        android:textColor="@color/whiteColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteColor"
-                android:hint="Третий ответ"
-                android:inputType="text"
-                android:singleLine="false"
-                android:textColor="@color/whiteColor" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_fourth_answer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+                <CheckBox
+                    android:id="@+id/fourth_correct_answer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/whiteColor" />
 
-            <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/add_fourth_answer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/whiteColor"
+                        android:hint="@string/fourth_answer"
+                        android:inputType="text"
+                        android:singleLine="false"
+                        android:textColor="@color/whiteColor" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/whiteColor"
-                android:hint="Четвертый ответ"
-                android:inputType="text"
-                android:singleLine="false"
-                android:textColor="@color/whiteColor" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/clear_from"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/menu_button_shape"
+                    android:fontFamily="@font/lobster_regular"
+                    android:shadowColor="@color/lightGrayColor"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/clear_form"
+                    android:textAllCaps="false"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="20sp" />
+
+                <Button
+                    android:id="@+id/add_new_question"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/menu_button_shape"
+                    android:fontFamily="@font/lobster_regular"
+                    android:shadowColor="@color/lightGrayColor"
+                    android:shadowDx="0"
+                    android:shadowDy="0"
+                    android:shadowRadius="5"
+                    android:text="@string/add_question"
+                    android:textAllCaps="false"
+                    android:textColor="@color/whiteColor"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

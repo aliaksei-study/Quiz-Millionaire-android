@@ -24,4 +24,12 @@
     <string name="leader_board">Таблица лидеров</string>
     <string name="create_account">Создать аккаунт</string>
     <string name="adding_question">Добавление вопроса</string>
+    <string name="press_to_load_image">Нажмите для загрузки фотографии вопроса...</string>
+    <string name="add_question_text">Текст вопроса</string>
+    <string name="first_answer">Первый ответ</string>
+    <string name="second_answer">Второй ответ</string>
+    <string name="third_answer">Третий ответ</string>
+    <string name="fourth_answer">Четвертый ответ</string>
+    <string name="clear_form">Очистить</string>
+    <string name="add_question">Добавить</string>
 </resources>
