@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,14 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.quizmillionaire.api.request.StatisticsRequest;
 import com.example.quizmillionaire.config.AdMobConfiguration;
 import com.example.quizmillionaire.config.NetworkConfiguration;
-import com.example.quizmillionaire.model.Player;
 import com.example.quizmillionaire.model.Statistics;
 import com.google.android.gms.ads.AdView;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -60,15 +57,15 @@ public class FinishGameActivity extends AppCompatActivity {
     }
 
     private void initializeView() {
-        if(numberOfAnsweredQuestions == 0) {
+        if (numberOfAnsweredQuestions == 0) {
             firstStar.setVisibility(View.GONE);
             secondStar.setVisibility(View.GONE);
             thirdStar.setVisibility(View.GONE);
         } else {
-            if(numberOfAnsweredQuestions < numberOfQuestions / 3) {
+            if (numberOfAnsweredQuestions < numberOfQuestions / 3) {
                 secondStar.setVisibility(View.GONE);
                 thirdStar.setVisibility(View.GONE);
-            } else if(numberOfAnsweredQuestions < (numberOfQuestions / 3) * 2) {
+            } else if (numberOfAnsweredQuestions < (numberOfQuestions / 3) * 2) {
                 thirdStar.setVisibility(View.GONE);
             }
         }
@@ -129,7 +126,7 @@ public class FinishGameActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NotNull Call<List<Statistics>> call,
                                            @NotNull Response<List<Statistics>> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             intent.putExtra("statistics", (Serializable) response.body());
                             startActivity(intent);
                         } else {

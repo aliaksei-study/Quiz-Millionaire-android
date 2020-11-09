@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/main_background_600_1200"
@@ -46,21 +47,14 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
-            <TextView
+            <ImageView
                 android:id="@+id/add_question_image"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
-                android:background="@color/colorPrimaryDark"
-                android:fontFamily="@font/lobster_regular"
+                android:layout_height="180dp"
                 android:gravity="center"
-                android:text="@string/press_to_load_image"
-                android:textColor="@color/whiteColor"
-                android:textSize="30sp" />
-
-            <Spinner
-                android:id="@+id/question_category"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:src="@drawable/ic_add_photo_alternate_white_24dp"
+                android:contentDescription="@string/add_question_asset"
+                />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/add_question_text"
