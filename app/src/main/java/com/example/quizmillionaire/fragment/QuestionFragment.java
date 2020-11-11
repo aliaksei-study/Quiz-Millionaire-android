@@ -127,7 +127,8 @@ public class QuestionFragment extends Fragment {
             activity.updateNumberOfCorrectAnswersTextView();
             int numberOfAnswer = 0;
             if (question.getImagePath() != null) {
-                Picasso.get().load(this.question.getImagePath()).into(questionImage);
+                Picasso.get().load(this.question.getImagePath()).resize(300, 200)
+                        .into(questionImage);
             }
             questionText.setText(this.question.getQuestionText());
             firstAnswer.setText(this.question.getAnswers().get(numberOfAnswer++).getAnswerText());

@@ -13,8 +13,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.cloudinary.Transformation;
+import com.cloudinary.android.MediaManager;
+import com.cloudinary.android.callback.ErrorInfo;
+import com.cloudinary.android.callback.UploadCallback;
+import com.cloudinary.utils.ObjectUtils;
+import com.example.quizmillionaire.api.request.AddingQuestionRequest;
+import com.example.quizmillionaire.config.NetworkConfiguration;
+import com.example.quizmillionaire.model.Answer;
+import com.example.quizmillionaire.model.Question;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddingQuestionActivity extends AppCompatActivity {
     private static final int SELECT_PICTURE = 1;
@@ -31,13 +51,26 @@ public class AddingQuestionActivity extends AppCompatActivity {
     private CheckBox fourthCorrectAnswer;
     private Button clearForm;
     private Button addNewQuestion;
+    private Uri selectedImage;
+    private EditText addQuestionEditText;
+    private EditText addFirstAnswerEditText;
+    private EditText addSecondAnswerEditText;
+    private EditText addThirdAnswerEditText;
+    private EditText addFourthAnswerEditText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.adding_question_activity);
+        configureCloudinary();
         findViewsById();
         setOnClickListeners();
+    }
+
+    private void configureCloudinary() {
+        Map<String, Object> cloudinaryConfig = new HashMap<>();
+        cloudinaryConfig.put("cloud_name", "dsnsf4ukx");
+        MediaManager.init(this, cloudinaryConfig);
     }
 
     @Override
@@ -52,7 +85,12 @@ public class AddingQuestionActivity extends AppCompatActivity {
         clearForm.setOnClickListener((view) -> clearFormScreen());
         addNewQuestion.setOnClickListener((view) -> {
             if(isFieldsFilled()) {
-                System.out.println("Good job");
+                if(selectedImage != null) {
+                    uploadToCloudinary();
+                } else {
+                    sendQuestionToTheServer(null);
+                }
+                clearFormScreen();
             } else {
                 Toast.makeText(getApplicationContext(), "Неверные данные! Должны быть " +
                         "заполнены все текстовые поля и выбран один правильный ответ", Toast.LENGTH_LONG).show();
@@ -61,11 +99,6 @@ public class AddingQuestionActivity extends AppCompatActivity {
     }
 
     private boolean isFieldsFilled() {
-        EditText addQuestionEditText = addQuestionText.getEditText();
-        EditText addFirstAnswerEditText = addFirstAnswer.getEditText();
-        EditText addSecondAnswerEditText = addSecondAnswer.getEditText();
-        EditText addThirdAnswerEditText = addThirdAnswer.getEditText();
-        EditText addFourthAnswerEditText = addFourthAnswer.getEditText();
         return isEditTextFilled(addQuestionEditText, addFirstAnswerEditText, addSecondAnswerEditText,
                 addThirdAnswerEditText, addFourthAnswerEditText) && isOneCheckBoxFilled(firstCorrectAnswer,
                 secondCorrectAnswer, thirdCorrectAnswer, fourthCorrectAnswer);
@@ -105,6 +138,11 @@ public class AddingQuestionActivity extends AppCompatActivity {
         this.fourthCorrectAnswer = findViewById(R.id.fourth_correct_answer);
         this.clearForm = findViewById(R.id.clear_from);
         this.addNewQuestion = findViewById(R.id.add_new_question);
+        this.addQuestionEditText = addQuestionText.getEditText();
+        this.addFirstAnswerEditText = addFirstAnswer.getEditText();
+        this.addSecondAnswerEditText = addSecondAnswer.getEditText();
+        this.addThirdAnswerEditText = addThirdAnswer.getEditText();
+        this.addFourthAnswerEditText = addFourthAnswer.getEditText();
     }
 
     private void loadInternalImage() {
@@ -115,11 +153,6 @@ public class AddingQuestionActivity extends AppCompatActivity {
     }
 
     private void clearFormScreen() {
-        EditText addQuestionEditText = addQuestionText.getEditText();
-        EditText addFirstAnswerEditText = addFirstAnswer.getEditText();
-        EditText addSecondAnswerEditText = addSecondAnswer.getEditText();
-        EditText addThirdAnswerEditText = addThirdAnswer.getEditText();
-        EditText addFourthAnswerEditText = addFourthAnswer.getEditText();
         resetEditTextValues(addQuestionEditText, addFirstAnswerEditText, addSecondAnswerEditText,
                 addThirdAnswerEditText, addFourthAnswerEditText);
         addQuestionImage.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
@@ -152,10 +185,72 @@ public class AddingQuestionActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             if (requestCode == SELECT_PICTURE) {
 
-                Uri selectedImageURI = data.getData();
+                this.selectedImage = data.getData();
 
-                Picasso.get().load(selectedImageURI).into(addQuestionImage);
+                Picasso.get().load(selectedImage).into(addQuestionImage);
             }
         }
+    }
+
+    private void uploadToCloudinary() {
+        MediaManager.get().upload(selectedImage).unsigned("ixvorzq8").callback(new UploadCallback() {
+            @Override
+            public void onStart(String requestId) {
+
+            }
+
+            @Override
+            public void onProgress(String requestId, long bytes, long totalBytes) {
+
+            }
+
+            @Override
+            public void onSuccess(String requestId, Map resultData) {
+                sendQuestionToTheServer(resultData.get("url").toString());
+            }
+
+            @Override
+            public void onError(String requestId, ErrorInfo error) {
+
+            }
+
+            @Override
+            public void onReschedule(String requestId, ErrorInfo error) {
+
+            }
+        }).dispatch();
+    }
+
+    private void sendQuestionToTheServer(String uploadedImageUrl) {
+        AddingQuestionRequest addingQuestionRequest = new AddingQuestionRequest(uploadedImageUrl,
+                addQuestionEditText.getText().toString(), getListOfAnswers());
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration
+                .getQuestionApi()
+                .saveQuestion(networkConfiguration.getJwtToken(), addingQuestionRequest)
+                .enqueue(new Callback<List<Question>>() {
+            @Override
+            public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Question>> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private List<Answer> getListOfAnswers() {
+        Answer firstAnswer = new Answer(addFirstAnswerEditText.getText().toString(),
+                firstCorrectAnswer.isChecked());
+        Answer secondAnswer = new Answer(addSecondAnswerEditText.getText().toString(),
+                secondCorrectAnswer.isChecked());
+        Answer thirdAnswer = new Answer(addThirdAnswerEditText.getText().toString(),
+                thirdCorrectAnswer.isChecked());
+        Answer fourthAnswer = new Answer(addFourthAnswerEditText.getText().toString(),
+                fourthCorrectAnswer.isChecked());
+        return Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer)
+                .collect(Collectors.toList());
     }
 }
