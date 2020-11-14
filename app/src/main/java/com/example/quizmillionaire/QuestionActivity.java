@@ -12,18 +12,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.quizmillionaire.adapter.SectionsStatePagerAdapter;
 import com.example.quizmillionaire.api.request.LikedQuestionRequest;
 import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.customviewpager.NonSwipeableViewPager;
+import com.example.quizmillionaire.dialogs.AnswerHistogramDialog;
 import com.example.quizmillionaire.fragment.QuestionFragment;
 import com.example.quizmillionaire.model.Player;
 import com.example.quizmillionaire.model.Question;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -117,6 +121,17 @@ public class QuestionActivity extends AppCompatActivity {
         });
     }
 
+    public void setFolksHelperOnClickListener() {
+        this.folksHelper.setOnClickListener((view) -> {
+            QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
+                    .getItem(numberOfQuestion);
+
+            getAnswersHistogramByQuestion(questionFragment.getCurrentQuestion());
+
+            folksHelper.setVisibility(ImageButton.GONE);
+        });
+    }
+
     public void setLikeQuestionOnClickListener() {
         this.likeQuestion.setOnClickListener((view) -> {
             QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
@@ -174,6 +189,27 @@ public class QuestionActivity extends AppCompatActivity {
                     public void onFailure(@NotNull Call<Player> call, @NotNull Throwable t) {
                         Toast.makeText(getApplicationContext(),
                                 "Error happened while was trying to dislike question!", Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    private void getAnswersHistogramByQuestion(Question question) {
+        NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
+        networkConfiguration.getAnswerStatisticsApi()
+                .getAnswersHistogram(networkConfiguration.getJwtToken(), question.getId())
+                .enqueue(new Callback<Map<Long, Integer>>() {
+                    @Override
+                    public void onResponse(Call<Map<Long, Integer>> call, Response<Map<Long, Integer>> response) {
+                        if(response.isSuccessful()) {
+                            FragmentManager manager = getSupportFragmentManager();
+                            AnswerHistogramDialog myDialogFragment = new AnswerHistogramDialog(response.body(), question);
+                            myDialogFragment.show(manager, "myDialog");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Map<Long, Integer>> call, Throwable t) {
+
                     }
                 });
     }

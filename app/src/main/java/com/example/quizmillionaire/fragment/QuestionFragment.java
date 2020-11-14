@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -90,6 +91,7 @@ public class QuestionFragment extends Fragment {
             questionActivity.setFiftyPercentHelperOnClickListener();
             questionActivity.setLikeQuestionOnClickListener();
             questionActivity.setDislikeQuestionOnClickListener();
+            questionActivity.setFolksHelperOnClickListener();
         }
     }
 
@@ -196,20 +198,27 @@ public class QuestionFragment extends Fragment {
 
     public void setRedBackgroundInIncorrectAnswers() {
         final int maxBorderOfGeneratedValue = 4;
+        List<Integer> generatedNumbers = new ArrayList<>();
         int questionButtonIndex;
         int changedAnswers = 0;
         while (changedAnswers < 2) {
             questionButtonIndex = getRandomNumberInBorders(0, maxBorderOfGeneratedValue);
-            if (!question.getAnswers().get(questionButtonIndex).getIsCorrect()) {
+            if (!question.getAnswers().get(questionButtonIndex).getIsCorrect() &&
+                    !generatedNumbers.contains(questionButtonIndex)) {
                 changeButtonColor(questionButtonIndex, Color.RED);
                 disableButton(questionButtonIndex);
                 changedAnswers++;
             }
+            generatedNumbers.add(questionButtonIndex);
         }
     }
 
     public int getRandomNumberInBorders(int min, int max) {
         return min + (int) (Math.random() * max);
+    }
+
+    public Question getCurrentQuestion() {
+        return this.question;
     }
 
     private Long getNumberOfAnswerByAnswerText(String answerText) {

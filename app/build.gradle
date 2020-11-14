@@ -39,7 +39,7 @@ dependencies {
     implementation 'org.jetbrains:annotations:15.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.cloudinary:cloudinary-android:1.28.2'
-
+    implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.cloudinary:cloudinary-android-preprocess:1.28.2'
 
     annotationProcessor('org.projectlombok:lombok:1.18.12')
