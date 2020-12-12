@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.quizmillionaire.api.AuthAPI;
 import com.example.quizmillionaire.api.request.PlayerAuthRequest;
@@ -16,6 +17,7 @@ import com.example.quizmillionaire.api.response.ApiExceptionResponse;
 import com.example.quizmillionaire.api.response.JwtResponse;
 import com.example.quizmillionaire.config.AdMobConfiguration;
 import com.example.quizmillionaire.config.NetworkConfiguration;
+import com.example.quizmillionaire.dialogs.LoadingDialog;
 import com.example.quizmillionaire.model.Question;
 import com.example.quizmillionaire.utils.validation.EmailTextWatcher;
 import com.example.quizmillionaire.utils.validation.ErrorTextWatcher;
@@ -41,12 +43,14 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextInputLayout playerEmail;
     private TextInputLayout playerPassword;
     private Button startGame;
+    private LoadingDialog dialog;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+        dialog = new LoadingDialog(MainMenuActivity.this);
         findElementsByIds();
         setOnClickListeners();
         setEditTextChangeListeners();
@@ -91,6 +95,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(@NotNull Call<List<Question>> call,
                                            @NotNull Response<List<Question>> response) {
+                        dialog.dismiss();
                         if(response.isSuccessful()) {
                             intent.putExtra("questions", (Serializable) response.body());
                             startActivity(intent);
@@ -109,6 +114,8 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void registerPrincipal(Intent intent) {
+        FragmentManager manager = getSupportFragmentManager();
+        dialog.show(manager, "loading");
         PlayerAuthRequest authRequest = new PlayerAuthRequest
                 (playerEmail.getEditText().getText().toString(),
                         playerPassword.getEditText().getText().toString());
@@ -123,6 +130,7 @@ public class MainMenuActivity extends AppCompatActivity {
                     NetworkConfiguration.getInstance().setJwtToken("Bearer " + jwtToken);
                     loadQuestions(intent, jwtToken);
                 } else {
+                    dialog.dismiss();
                     if(response.errorBody() != null) {
                         showResponseErrorMessage(response.errorBody());
                     }
