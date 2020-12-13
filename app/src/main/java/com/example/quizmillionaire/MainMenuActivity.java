@@ -51,6 +51,7 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
         dialog = new LoadingDialog(MainMenuActivity.this);
+        this.setFinishOnTouchOutside(false);
         findElementsByIds();
         setOnClickListeners();
         setEditTextChangeListeners();
@@ -139,6 +140,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NotNull Call<JwtResponse> call, @NotNull Throwable t) {
+                dialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Нет подключения к интернету", Toast.LENGTH_LONG).show();
             }
         });

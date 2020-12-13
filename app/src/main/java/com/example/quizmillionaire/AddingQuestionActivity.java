@@ -12,20 +12,20 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
-import com.cloudinary.Transformation;
 import com.cloudinary.android.MediaManager;
 import com.cloudinary.android.callback.ErrorInfo;
 import com.cloudinary.android.callback.UploadCallback;
-import com.cloudinary.utils.ObjectUtils;
 import com.example.quizmillionaire.api.request.AddingQuestionRequest;
+import com.example.quizmillionaire.api.response.AddedQuestionResponse;
 import com.example.quizmillionaire.config.NetworkConfiguration;
+import com.example.quizmillionaire.dialogs.LoadingDialog;
 import com.example.quizmillionaire.model.Answer;
 import com.example.quizmillionaire.model.Question;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,20 +57,27 @@ public class AddingQuestionActivity extends AppCompatActivity {
     private EditText addSecondAnswerEditText;
     private EditText addThirdAnswerEditText;
     private EditText addFourthAnswerEditText;
+    private LoadingDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.adding_question_activity);
+        dialog = new LoadingDialog(AddingQuestionActivity.this);
+        this.setFinishOnTouchOutside(false);
         configureCloudinary();
         findViewsById();
         setOnClickListeners();
     }
 
     private void configureCloudinary() {
-        Map<String, Object> cloudinaryConfig = new HashMap<>();
-        cloudinaryConfig.put("cloud_name", "dsnsf4ukx");
-        MediaManager.init(this, cloudinaryConfig);
+        try {
+            Map<String, Object> cloudinaryConfig = new HashMap<>();
+            cloudinaryConfig.put("cloud_name", "dsnsf4ukx");
+            MediaManager.init(this, cloudinaryConfig);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -84,13 +91,14 @@ public class AddingQuestionActivity extends AppCompatActivity {
         addQuestionImage.setOnClickListener((view) -> loadInternalImage());
         clearForm.setOnClickListener((view) -> clearFormScreen());
         addNewQuestion.setOnClickListener((view) -> {
-            if(isFieldsFilled()) {
-                if(selectedImage != null) {
+            if (isFieldsFilled()) {
+                FragmentManager manager = getSupportFragmentManager();
+                dialog.show(manager, "Question loading");
+                if (selectedImage != null) {
                     uploadToCloudinary();
                 } else {
                     sendQuestionToTheServer(null);
                 }
-                clearFormScreen();
             } else {
                 Toast.makeText(getApplicationContext(), "Неверные данные! Должны быть " +
                         "заполнены все текстовые поля и выбран один правильный ответ", Toast.LENGTH_LONG).show();
@@ -106,8 +114,8 @@ public class AddingQuestionActivity extends AppCompatActivity {
 
     private boolean isEditTextFilled(EditText... editTexts) {
         boolean isFilled = true;
-        for(EditText editText: editTexts) {
-            if(editText != null) {
+        for (EditText editText : editTexts) {
+            if (editText != null) {
                 isFilled = !editText.getText().toString().equals("");
             }
         }
@@ -116,8 +124,8 @@ public class AddingQuestionActivity extends AppCompatActivity {
 
     private boolean isOneCheckBoxFilled(CheckBox... checkBoxes) {
         byte numberOfCheckedCheckBoxes = 0;
-        for(CheckBox checkBox: checkBoxes) {
-            if(checkBox.isChecked()) {
+        for (CheckBox checkBox : checkBoxes) {
+            if (checkBox.isChecked()) {
                 numberOfCheckedCheckBoxes++;
             }
         }
@@ -157,29 +165,29 @@ public class AddingQuestionActivity extends AppCompatActivity {
                 addThirdAnswerEditText, addFourthAnswerEditText);
         addQuestionImage.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),
                 R.drawable.ic_add_photo_alternate_white_24dp));
+        this.selectedImage = null;
         resetCheckboxes(firstCorrectAnswer, secondCorrectAnswer, thirdCorrectAnswer,
                 fourthCorrectAnswer);
     }
 
     private void resetEditTextValues(EditText... editTexts) {
-        for(EditText editText: editTexts) {
-            if(editText != null) {
+        for (EditText editText : editTexts) {
+            if (editText != null) {
                 editText.setText("");
             }
         }
     }
 
     private void resetCheckboxes(CheckBox... checkBoxes) {
-        for(CheckBox checkBox: checkBoxes) {
-            if(checkBox != null) {
+        for (CheckBox checkBox : checkBoxes) {
+            if (checkBox != null) {
                 checkBox.setChecked(false);
             }
         }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
@@ -211,7 +219,7 @@ public class AddingQuestionActivity extends AppCompatActivity {
 
             @Override
             public void onError(String requestId, ErrorInfo error) {
-
+                dialog.dismiss();
             }
 
             @Override
@@ -228,17 +236,24 @@ public class AddingQuestionActivity extends AppCompatActivity {
         networkConfiguration
                 .getQuestionApi()
                 .saveQuestion(networkConfiguration.getJwtToken(), addingQuestionRequest)
-                .enqueue(new Callback<List<Question>>() {
-            @Override
-            public void onResponse(Call<List<Question>> call, Response<List<Question>> response) {
+                .enqueue(new Callback<AddedQuestionResponse>() {
+                    @Override
+                    public void onResponse(Call<AddedQuestionResponse> call, Response<AddedQuestionResponse> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(AddingQuestionActivity.this, "Вопрос успешно добавлен",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        clearFormScreen();
+                        dialog.dismiss();
+                    }
 
-            }
-
-            @Override
-            public void onFailure(Call<List<Question>> call, Throwable t) {
-
-            }
-        });
+                    @Override
+                    public void onFailure(Call<AddedQuestionResponse> call, Throwable t) {
+                        dialog.dismiss();
+                        Toast.makeText(AddingQuestionActivity.this, "Ошибка при добавлении вопроса. Проверьте подключение к интернету",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private List<Answer> getListOfAnswers() {

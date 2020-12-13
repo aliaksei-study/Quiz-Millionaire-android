@@ -1,6 +1,7 @@
 package com.example.quizmillionaire.api;
 
 import com.example.quizmillionaire.api.request.AddingQuestionRequest;
+import com.example.quizmillionaire.api.response.AddedQuestionResponse;
 import com.example.quizmillionaire.model.Question;
 
 import java.util.List;
@@ -20,6 +21,6 @@ public interface QuestionAPI {
 
     @Headers("Content-Type: application/json")
     @POST("/api/v1/questions")
-    Call<List<Question>> saveQuestion(@Header("Authorization") String auth,
-                                      @Body AddingQuestionRequest addingQuestionRequest);
+    Call<AddedQuestionResponse> saveQuestion(@Header("Authorization") String auth,
+                                             @Body AddingQuestionRequest addingQuestionRequest);
 }
