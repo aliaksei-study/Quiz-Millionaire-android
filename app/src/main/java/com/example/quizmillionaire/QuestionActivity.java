@@ -1,17 +1,12 @@
 package com.example.quizmillionaire;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.quizmillionaire.adapter.SectionsStatePagerAdapter;
@@ -19,16 +14,24 @@ import com.example.quizmillionaire.api.request.LikedQuestionRequest;
 import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.customviewpager.NonSwipeableViewPager;
 import com.example.quizmillionaire.dialogs.AnswerHistogramDialog;
+import com.example.quizmillionaire.dialogs.DialogUtils;
 import com.example.quizmillionaire.fragment.QuestionFragment;
 import com.example.quizmillionaire.model.Player;
 import com.example.quizmillionaire.model.Question;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import lombok.NonNull;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,12 +46,15 @@ public class QuestionActivity extends AppCompatActivity {
     private ImageButton likeQuestion;
     private TextView numberOfCorrectAnswers;
     private SectionsStatePagerAdapter sectionsStatePagerAdapter;
+    private RewardedAd rewardedAd;
+    private int numberOfRewardedAds = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.question_activity);
         findElementsById();
+        loadRewardedAd();
         Intent intent = getIntent();
         this.questions = (List<Question>) intent.getSerializableExtra("questions");
         setupViewPager(viewPager);
@@ -114,11 +120,33 @@ public class QuestionActivity extends AppCompatActivity {
 
     public void setFiftyPercentHelperOnClickListener() {
         this.fiftyPercentHelper.setOnClickListener((view) -> {
-            QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
-                    .getItem(numberOfQuestion);
-            questionFragment.setRedBackgroundInIncorrectAnswers();
-            fiftyPercentHelper.setVisibility(ImageButton.GONE);
+            if (numberOfRewardedAds != 0) {
+                DialogUtils.showPopUp(QuestionActivity.this, null,
+                        "Оставить подсказку и посмотреть рекламу?", "Использовать подсказку", "Посмотреть рекламу",
+                        (dialog, which) -> {
+                            useFiftyPercentHelper();
+                            fiftyPercentHelper.setVisibility(ImageButton.GONE);
+                        }, (dialog, which) -> {
+                            RewardedAdCallback adCallback = new RewardedAdCallback() {
+                                @Override
+                                public void onUserEarnedReward(@NonNull RewardItem reward) {
+                                    useFiftyPercentHelper();
+                                    numberOfRewardedAds = 0;
+                                }
+                            };
+                            rewardedAd.show(QuestionActivity.this, adCallback);
+                        });
+            } else {
+                useFiftyPercentHelper();
+                fiftyPercentHelper.setVisibility(ImageButton.GONE);
+            }
         });
+    }
+
+    public void useFiftyPercentHelper() {
+        QuestionFragment questionFragment = (QuestionFragment) sectionsStatePagerAdapter
+                .getItem(numberOfQuestion);
+        questionFragment.setRedBackgroundInIncorrectAnswers();
     }
 
     public void setFolksHelperOnClickListener() {
@@ -200,7 +228,7 @@ public class QuestionActivity extends AppCompatActivity {
                 .enqueue(new Callback<Map<Long, Integer>>() {
                     @Override
                     public void onResponse(Call<Map<Long, Integer>> call, Response<Map<Long, Integer>> response) {
-                        if(response.isSuccessful()) {
+                        if (response.isSuccessful()) {
                             FragmentManager manager = getSupportFragmentManager();
                             AnswerHistogramDialog myDialogFragment = new AnswerHistogramDialog(response.body(), question);
                             myDialogFragment.show(manager, "myDialog");
@@ -212,5 +240,23 @@ public class QuestionActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void loadRewardedAd() {
+        MobileAds.initialize(QuestionActivity.this, initializationStatus -> {
+        });
+        this.rewardedAd = new RewardedAd(QuestionActivity.this, "ca-app-pub-3940256099942544/5224354917");
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                super.onRewardedAdLoaded();
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                super.onRewardedAdFailedToLoad(adError);
+            }
+        };
+        this.rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
     }
 }
