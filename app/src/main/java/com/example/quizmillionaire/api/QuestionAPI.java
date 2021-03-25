@@ -17,7 +17,7 @@ import retrofit2.http.POST;
 public interface QuestionAPI {
     @Headers("Content-Type: application/json")
     @GET("/api/v1/questions/random-questions")
-    Call<List<Question>> getQuestions(@Header("Authorization") String auth);
+    Call<List<Question>> getQuestions(@Header("Authorization") String auth, @Header("Accept-Language") String locale);
 
     @Headers("Content-Type: application/json")
     @POST("/api/v1/questions")

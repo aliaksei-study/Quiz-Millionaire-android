@@ -1,6 +1,8 @@
 package com.example.quizmillionaire.api.request;
 
 import com.example.quizmillionaire.model.Answer;
+import com.example.quizmillionaire.model.TranslatedAnswer;
+import com.example.quizmillionaire.model.TranslatedText;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class AddingQuestionRequest {
-    private String questionImageUrl;
-    private String questionText;
-    private List<Answer> answers;
+    private String imagePath;
+    private List<TranslatedText> questionTextTranslates;
+    private List<TranslatedAnswer> answers;
 }

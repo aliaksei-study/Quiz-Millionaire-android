@@ -14,4 +14,6 @@ import lombok.ToString;
 public class PlayerAnswerRequest {
     private Long answerId;
     private Long questionId;
+    private String languageAbbrev;
+    private String language;
 }

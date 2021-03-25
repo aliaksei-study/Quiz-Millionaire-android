@@ -22,12 +22,17 @@ import com.example.quizmillionaire.api.response.AddedQuestionResponse;
 import com.example.quizmillionaire.config.NetworkConfiguration;
 import com.example.quizmillionaire.dialogs.LoadingDialog;
 import com.example.quizmillionaire.model.Answer;
+import com.example.quizmillionaire.model.Language;
 import com.example.quizmillionaire.model.Question;
+import com.example.quizmillionaire.model.TranslatedAnswer;
+import com.example.quizmillionaire.model.TranslatedText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -230,8 +235,12 @@ public class AddingQuestionActivity extends AppCompatActivity {
     }
 
     private void sendQuestionToTheServer(String uploadedImageUrl) {
+        Language language = new Language(Locale.getDefault().getDisplayLanguage(),
+                Locale.getDefault().getLanguage());
+        List<TranslatedText> textTranslates = new ArrayList<>();
+        textTranslates.add(new TranslatedText(addQuestionEditText.getText().toString(), language));
         AddingQuestionRequest addingQuestionRequest = new AddingQuestionRequest(uploadedImageUrl,
-                addQuestionEditText.getText().toString(), getListOfAnswers());
+                textTranslates, getListOfAnswers(language));
         NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
         networkConfiguration
                 .getQuestionApi()
@@ -256,15 +265,15 @@ public class AddingQuestionActivity extends AppCompatActivity {
                 });
     }
 
-    private List<Answer> getListOfAnswers() {
-        Answer firstAnswer = new Answer(addFirstAnswerEditText.getText().toString(),
-                firstCorrectAnswer.isChecked());
-        Answer secondAnswer = new Answer(addSecondAnswerEditText.getText().toString(),
-                secondCorrectAnswer.isChecked());
-        Answer thirdAnswer = new Answer(addThirdAnswerEditText.getText().toString(),
-                thirdCorrectAnswer.isChecked());
-        Answer fourthAnswer = new Answer(addFourthAnswerEditText.getText().toString(),
-                fourthCorrectAnswer.isChecked());
+    private List<TranslatedAnswer> getListOfAnswers(Language language) {
+        TranslatedAnswer firstAnswer = new TranslatedAnswer(firstCorrectAnswer.isChecked(),
+                Stream.of(new TranslatedText(addFirstAnswerEditText.getText().toString(), language)).collect(Collectors.toList()));
+        TranslatedAnswer secondAnswer = new TranslatedAnswer(secondCorrectAnswer.isChecked(),
+                Stream.of(new TranslatedText(addSecondAnswerEditText.getText().toString(), language)).collect(Collectors.toList()));
+        TranslatedAnswer thirdAnswer = new TranslatedAnswer(thirdCorrectAnswer.isChecked(),
+                Stream.of(new TranslatedText(addThirdAnswerEditText.getText().toString(), language)).collect(Collectors.toList()));
+        TranslatedAnswer fourthAnswer = new TranslatedAnswer(fourthCorrectAnswer.isChecked(),
+                Stream.of(new TranslatedText(addFourthAnswerEditText.getText().toString(), language)).collect(Collectors.toList()));
         return Stream.of(firstAnswer, secondAnswer, thirdAnswer, fourthAnswer)
                 .collect(Collectors.toList());
     }

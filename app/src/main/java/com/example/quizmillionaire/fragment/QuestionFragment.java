@@ -28,6 +28,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -233,7 +234,8 @@ public class QuestionFragment extends Fragment {
     }
 
     private void sendAnswerStatistics(Long questionId, Long answerId) {
-        PlayerAnswerRequest playerAnswerRequest = new PlayerAnswerRequest(answerId, questionId);
+        PlayerAnswerRequest playerAnswerRequest = new PlayerAnswerRequest(answerId, questionId,
+                Locale.getDefault().getLanguage(), Locale.getDefault().getDisplayLanguage());
         NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
         networkConfiguration.getAnswerStatisticsApi()
                 .saveAnswerStatistics(networkConfiguration.getJwtToken(),

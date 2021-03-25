@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -91,7 +92,7 @@ public class MainMenuActivity extends AppCompatActivity {
         NetworkConfiguration networkConfiguration = NetworkConfiguration.getInstance();
         networkConfiguration
                 .getQuestionApi()
-                .getQuestions("Bearer " + jwtToken)
+                .getQuestions("Bearer " + jwtToken, Locale.getDefault().getLanguage())
                 .enqueue(new Callback<List<Question>>() {
                     @Override
                     public void onResponse(@NotNull Call<List<Question>> call,
