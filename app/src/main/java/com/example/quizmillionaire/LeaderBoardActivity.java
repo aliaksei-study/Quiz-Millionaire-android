@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.quizmillionaire.adapter.StatisticsLeaderBoardAdapter;
 import com.example.quizmillionaire.model.Statistics;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class LeaderBoardActivity extends AppCompatActivity {
@@ -23,6 +25,10 @@ public class LeaderBoardActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         List<Statistics> statistics = (List<Statistics>) intent.getSerializableExtra("statistics");
+
+        if(statistics != null) {
+            statistics.sort((o1, o2) -> o2.getScore() - o1.getScore());
+        }
 
         ImageView backButton = findViewById(R.id.back_button);
         RecyclerView playerLeaderBoard = findViewById(R.id.player_leaderboard);
